@@ -351,30 +351,40 @@
 
 
 
- 
+
+```html
 <!-- =========================================
      RESPONSIVE FOOTER
 ========================================= -->
 
 <footer
   class="relative w-full
-         min-h-[700px]
+         min-h-[720px]
          sm:min-h-[650px]
          md:min-h-0
          md:aspect-[21/9]
          bg-cover
          bg-center
          bg-no-repeat
-         text-white"
+         text-white
+         overflow-hidden"
   style="background-image: url('image/image_c4.JPG');">
 
-  <!-- Dark Transparent Overlay -->
+
+  <!-- =========================================
+       DARK TRANSPARENT OVERLAY
+  ========================================== -->
+
   <div class="absolute inset-0 bg-black/55"></div>
 
 
-  <!-- Footer Content -->
+  <!-- =========================================
+       FOOTER CONTENT
+  ========================================== -->
+
   <div
     class="relative
+           z-10
            min-h-full
            container
            mx-auto
@@ -411,6 +421,7 @@
           Newsletter
         </h4>
 
+
         <p
           class="text-gray-200
                  text-sm
@@ -427,6 +438,9 @@
 
         <form class="flex flex-col gap-3">
 
+
+          <!-- Email -->
+
           <input
             type="email"
             placeholder="Enter your email"
@@ -441,26 +455,35 @@
                    placeholder-gray-300
                    focus:outline-none
                    focus:ring-2
-                   focus:ring-yellow-300"
+                   focus:ring-yellow-300
+                   transition
+                   duration-300"
             required
           >
 
 
+          <!-- Subscribe Button -->
+
           <button
             type="submit"
             class="w-full
-                   bg-[#009BE2]
-                   text-white
-                   font-semibold
+                   px-4
                    py-3
                    rounded-lg
-                   hover:bg-[#0089c8]
-                   transition
+                   bg-white/10
+                   border
+                   border-white/30
+                   text-white
+                   font-semibold
+                   hover:bg-[#009BE2]
+                   hover:border-[#009BE2]
+                   transition-all
                    duration-300">
 
             Subscribe
 
           </button>
+
 
         </form>
 
@@ -498,9 +521,10 @@
 
       <!-- =====================================
            QUICK LINKS
+           Hidden on Mobile
       ====================================== -->
 
-      <div>
+      <div class="hidden sm:block">
 
         <h4
           class="font-semibold
