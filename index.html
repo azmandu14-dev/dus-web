@@ -24,57 +24,53 @@
       </div>
     </div>
 
-    <!-- Desktop Menu -->
-    <div class="hidden md:flex items-center space-x-6">
-      <ul class="flex space-x-6 text-white">
-        <li><a href="#about" class="hover:text-yellow-300">About Us</a></li>
-        <li class="relative group">
-    <a href="#" class="hover:text-yellow-300 flex items-center">
-        Our Initiatives
-        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7"/>
-        </svg>
-    </a>
+    <!-- Desktop Navigation Menu -->
+<div class="hidden md:flex items-center space-x-6"> 
+  <ul class="flex space-x-6 text-white font-medium"> 
+    <li><a href="#about" class="hover:text-yellow-300 transition-colors">About Us</a></li> 
 
-    <!-- Dropdown -->
-    <ul class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg hidden group-hover:block z-50">
-        <li>
-            <a href="ongoing-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
-                Ongoing Programs
-            </a>
-        </li>
-        <li>
-            <a href="previous-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-b-lg">
-                Previous Programs
-            </a>
-        </li>
-        <li>
-            <a href="ongoing-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
-                Disaster Response
-            </a>
-        </li>
-        <li>
-            <a href="ongoing-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
-                Social Enterprise
-            </a>
-        </li>
-    </ul>
-</li>
-        <li><a href="#about" class="hover:text-yellow-300">Resources</a></li>
-        <li><a href="#programs" class="hover:text-yellow-300">Engagement</a></li>
-        
-      </ul>
+    <!-- Dropdown Item Container (Group) -->
+    <li class="relative group py-4"> 
+      <a href="#" class="hover:text-yellow-300 flex items-center transition-colors"> 
+        Our Initiatives 
+        <svg class="w-4 h-4 ml-1 transform transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/> 
+        </svg> 
+      </a> 
 
-      <a href="#" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200">
-        Donate
-      </a>
-    </div>
+      <!-- Animated Smooth Dropdown -->
+      <ul class="dropdown-menu-animated absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl ring-1 ring-black/5 divide-y divide-slate-100 overflow-hidden z-50"> 
+        <li> 
+            <a href="ongoing-programs.html" class="block px-4 py-3 text-gray-700 hover:bg-emerald-600 hover:text-white transition-colors duration-150"> 
+                Ongoing Programs 
+            </a> 
+        </li> 
+        <li> 
+            <a href="previous-programs.html" class="block px-4 py-3 text-gray-700 hover:bg-emerald-600 hover:text-white transition-colors duration-150"> 
+                Previous Programs 
+            </a> 
+        </li> 
+        <li> 
+            <a href="disaster-response.html" class="block px-4 py-3 text-gray-700 hover:bg-emerald-600 hover:text-white transition-colors duration-150"> 
+                Disaster Response 
+            </a> 
+        </li> 
+        <li> 
+            <a href="social-enterprise.html" class="block px-4 py-3 text-gray-700 hover:bg-emerald-600 hover:text-white transition-colors duration-150"> 
+                Social Enterprise 
+            </a> 
+        </li> 
+      </ul> 
+    </li> 
 
+    <li><a href="#resources" class="hover:text-yellow-300 transition-colors">Resources</a></li> 
+    <li><a href="#engagement" class="hover:text-yellow-300 transition-colors">Engagement</a></li> 
+  </ul> 
+
+  <a href="#donate" class="bg-white text-emerald-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-sm"> 
+    Donate 
+  </a> 
+</div>
     <!-- Hamburger Button -->
     <button id="menu-btn" class="md:hidden text-white">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
