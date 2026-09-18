@@ -3,31 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grambangla Unnayan Committee</title>
+  <title>Dwip Unnayan Songstha</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body class="bg-gray-50 font-sans">
   <!-- Header -->
-  <header class="shadow-lg sticky top-0 z-50">
-    <nav class="bg-green-600 container mx-auto px-4 py-4 flex justify-between items-center">
-      <div class="flex items-center space-x-4">
-        <div class="bg-white p-2 rounded">
-          <img src="image/guc.png" alt="Grambangla Unnayan Committee Logo" class="h-10 w-auto">
-        </div>
-        <div class="text-2xl font-bold text-white">Grambangla Unnayan Committee</div>
-      </div>
-      <ul class="flex space-x-6">
-        <li><a href="#about" class="hover:text-yellow-300 text-white">ABOUT</a></li>
-        <li><a href="#about" class="hover:text-yellow-300 text-white">WHAT WE DO</a></li>
-        <li><a href="#about" class="hover:text-yellow-300 text-white">PROJECTS</li>
-          <li><a href="#programs" class="hover:text-yellow-300 text-white">TEAM</a></li>
-        <li><a href="#programs" class="hover:text-yellow-300 text-white">TEAM</a></li>
-        <li><a href="#programs" class="hover:text-yellow-300 text-white">Blogs</a></li>
-        <li><a href="#donate" class="hover:text-yellow-300 text-white">Donate</a></li>
-      </ul>
-      <a href="#" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200">Donate</a>
-    </nav>
+  <header class="shadow-lg sticky top-0 z-50 w-full">
+  <nav class="bg-[#009BE2] w-full px-6 lg:px-12 py-4">
+  <div class="flex justify-between items-center">
 
+    <!-- Logo -->
+    <div class="flex items-center space-x-3">
+      <div class="bg-white p-2 rounded">
+        <img src="image/dus.png" alt="dus_logo" class="h-10 w-auto">
+      </div>
+      <div class="text-lg md:text-2xl font-bold text-white">
+        Dwip Unnayan Songstha
+      </div>
+    </div>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center space-x-6">
+      <ul class="flex space-x-6 text-white">
+        <li><a href="#about" class="hover:text-yellow-300">About Us</a></li>
+        <li class="relative group">
+    <a href="#" class="hover:text-yellow-300 flex items-center">
+        Our Initiatives
+        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 9l-7 7-7-7"/>
+        </svg>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg hidden group-hover:block z-50">
+        <li>
+            <a href="ongoing-programs.html"
+               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
+                Ongoing Programs
+            </a>
+        </li>
+        <li>
+            <a href="previous-programs.html"
+               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-b-lg">
+                Previous Programs
+            </a>
+        </li>
+        <li>
+            <a href="ongoing-programs.html"
+               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
+                Disaster Response
+            </a>
+        </li>
+        <li>
+            <a href="ongoing-programs.html"
+               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
+                Social Enterprise
+            </a>
+        </li>
+    </ul>
+</li>
+        <li><a href="#about" class="hover:text-yellow-300">Resources</a></li>
+        <li><a href="#programs" class="hover:text-yellow-300">Engagement</a></li>
+        
+      </ul>
+
+      <a href="#" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200">
+        Donate
+      </a>
+    </div>
+
+    <!-- Hamburger Button -->
+    <button id="menu-btn" class="md:hidden text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden mt-4">
+    <ul class="flex flex-col space-y-4 text-white">
+      <li><a href="#about" class="block hover:text-yellow-300">About</a></li>
+      <li><a href="#about" class="block hover:text-yellow-300">What we do</a></li>
+      <li><a href="#about" class="block hover:text-yellow-300">Projects</a></li>
+      <li><a href="#programs" class="block hover:text-yellow-300">Programs</a></li>
+    </ul>
+
+    <a href="#"
+      class="mt-4 inline-block bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200">
+      Donate
+    </a>
+  </div>
+</nav>
 
 
   </header>
@@ -74,26 +147,23 @@
 
 </head>
 <body class="bg-gray-50 font-sans">
-  <!-- Announcement Bar -->
-  <div id="announcement-bar">
-    📢 We do not receive funds from Tobacco, Plastic, Fossil fuel, Alcohol and Sweetened Beverage industries!🚫
-  </div>
+  
 
 
-  <!-- Casousel part start -->
+<!-- Casousel part start -->
 
 <section class="relative py-0">
   <div class="container mx-auto relative">
     <div class="swiper mySwiper relative">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
-          <img src="image/cover3.jpg" class="w-full h-[600px] object-cover" alt="Slide 1">
+          <img src="image/image_c1.JPG" class="w-full h-[600px] object-cover" alt="Slide 1">
         </div>
         <div class="swiper-slide">
-          <img src="image/cover2.jpg" class="w-full h-[600px] object-cover" alt="Slide 2">
+          <img src="image/image_c2.JPG" class="w-full h-[600px] object-cover" alt="Slide 2">
         </div>
         <div class="swiper-slide">
-          <img src="image/cover1.jpg" class="w-full h-[600px] object-cover" alt="Slide 3">
+          <img src="image/image_c3.JPG" class="w-full h-[600px] object-cover" alt="Slide 3">
         </div>
       </div>
 
@@ -157,55 +227,123 @@
 </script>
 
   <!-- Carousel Section End -->
-
-  
- <!-- Casousel part end -->  
+ 
 
   <!-- About Section -->
   <section id="about" class="py-16 bg--100">
     <div class="container mx-auto px-4">
       <h2 class="text-4xl font-bold text-center mb-8">About Us</h2>
-      <p class="text-lg text-green-700 text-center max-w-3xl mx-auto">We are a global organization committed to ensuring that every child has access to education, healthcare, and a safe environment. Our mission is to create lasting change and empower communities to thrive.</p>
+      <p class="text-lg text-green-700 text-center max-w-3xl mx-auto">A Community based philanthropic and development organization emergence/dedicated to sustainable poverty reduction, entrepreneur’s promotion and capacity building of the underprivileged directing towards a just society. Interventions, DUS strives to bring about positive change in the quality of life of the poor community of rural Bangladesh..</p>
     </div>
   </section>
 
   <!-- Programs Section -->
-  <section id="programs" class="py-16">
-    <div class="container mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-8">Our Programs</h2>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-          <h3 class="text-2xl font-bold mb-4">Education</h3>
-          <p class="text-green-700">Providing access to quality education for children in need.</p>
-        </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-          <h3 class="text-2xl font-bold mb-4">Healthcare</h3>
-          <p class="text-gray-700">Ensuring children receive essential healthcare services.</p>
-        </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-          <h3 class="text-2xl font-bold mb-4">Child Protection</h3>
-          <p class="text-gray-700">Creating safe environments for children to grow and thrive.</p>
+  <section id="programs" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="text-4xl font-bold text-center mb-10">Our Programs</h2>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <!-- Education -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="image/image_c2.JPG"
+             alt="Education Program"
+             class="w-full h-56 object-cover">
+        <div class="p-6 text-center">
+          <h3 class="text-2xl font-bold mb-3">Micro-finance</h3>
+          <p class="text-gray-600">
+            Micro finance Program is the core program of all DUS activities. DUS has been implementing its major program in partnership with Palli Karma Sahayak Foundation (PKSF) since 2000. 
+          </p>
         </div>
       </div>
+
+      <!-- Healthcare -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="image/phc.JPG"
+             alt="Healthcare Program"
+             class="w-full h-56 object-cover">
+        <div class="p-6 text-center">
+          <h3 class="text-2xl font-bold mb-3">Healthcare</h3>
+          <p class="text-gray-600">
+            Ensuring children receive essential healthcare services.
+          </p>
+        </div>
+      </div>
+
+      <!-- Child Protection -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="image/wash.JPG"
+             alt="Child Protection Program"
+             class="w-full h-56 object-cover">
+        <div class="p-6 text-center">
+          <h3 class="text-2xl font-bold mb-3">WASH</h3>
+          <p class="text-gray-600">
+            Creating safe environments for children to grow and thrive.
+          </p>
+        </div>
+      </div>
+
     </div>
-  </section>
+  </div>
+</section>
+
+<section id="programs" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="text-4xl font-bold text-center mb-10">Our Programs</h2>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <!-- Education -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="image/image_c2.JPG"
+             alt="Education Program"
+             class="w-full h-56 object-cover">
+        <div class="p-6 text-center">
+          <h3 class="text-2xl font-bold mb-3">Micro-finance</h3>
+          <p class="text-gray-600">
+            Micro finance Program is the core program of all DUS activities. DUS has been implementing its major program in partnership with Palli Karma Sahayak Foundation (PKSF) since 2000. 
+          </p>
+        </div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="image/phc.JPG"
+             alt="Healthcare Program"
+             class="w-full h-56 object-cover">
+        <div class="p-6 text-center">
+          <h3 class="text-2xl font-bold mb-3">Healthcare</h3>
+          <p class="text-gray-600">
+            Ensuring children receive essential healthcare services.
+          </p>
+        </div>
+      </div>
+
+      <!-- Child Protection -->
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="image/wash.JPG"
+             alt="Child Protection Program"
+             class="w-full h-56 object-cover">
+        <div class="p-6 text-center">
+          <h3 class="text-2xl font-bold mb-3">WASH</h3>
+          <p class="text-gray-600">
+            Creating safe environments for children to grow and thrive.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
   <!-- Call to Action Section -->
-  <!-- Call to Action Section with Background Image -->
-<section id="donate" 
-  class="relative bg-cover bg-center bg-no-repeat py-24 text-white"
-  style="background-image: url('image/donation-bg.jpg');">
-
-  <!-- Overlay for contrast -->
-  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-
-  <!-- Content -->
-  <div class="relative container mx-auto px-4 text-center">
-    <h2 class="text-4xl font-bold mb-6">Thank You for Visiting Us!</h2>
-    <p class="text-lg mb-6 max-w-2xl mx-auto">
-      Your support helps us provide essential services to children in need and build a better future for all.
+<section id="donate" class="py-16 bg-[#009BE2] text-white">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-4xl font-bold mb-6">Make a Difference Today</h2>
+    <p class="text-lg mb-6">
+      Your support helps us provide essential services to children in need around the world.
     </p>
-    <a href="#" class="bg-white text-green-700 px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-gray-200 transition">
+    <a href="#" class="bg-white text-[#0c4f9d] px-6 py-3 rounded-lg font-medium hover:bg-gray-200">
       Donate Now
     </a>
   </div>
@@ -213,178 +351,107 @@
 
 
 
-<!-- Success Section with Bangladesh Map Watermark -->
-<section id="success" class="relative py-20 bg-green-50 overflow-hidden">
-  <!-- Bangladesh Map Watermark -->
-  <div class="absolute inset-0 opacity-10 flex justify-center items-center pointer-events-none">
-    <img src="image/bangladesh-map.png" alt="Bangladesh Map Watermark" class="w-[80%] md:w-[60%] object-contain">
+  <!-- Footer desktop -->
+
+<footer class="relative w-full aspect-[21/9] bg-cover bg-center text-white"
+        style="background-image: url('image/image_c4.JPG');">
+
+  <!-- Dark transparent overlay -->
+
+  <div class="absolute inset-0 bg-black/55"></div>
+
+  <!-- Content -->
+
+  <div class="relative h-full container mx-auto px-6 flex flex-col justify-end pb-8">
+    <div class="grid md:grid-cols-3 gap-8">
+
+ <!-- Newsletter -->
+<div>
+  <h4 class="text-lg font-semibold mb-3">Newsletter</h4>
+  <p class="text-gray-200 text-sm mb-4">
+    Stay updated with our latest programs, research, and stories from coastal communities.
+  </p>
+
+  <form class="flex flex-col gap-3">
+    <input
+      type="email"
+      placeholder="Enter your email"
+      class="px-4 py-3 rounded-lg bg-white/10 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+      required
+    >
+
+<button
+  type="submit"
+  class="bg-[#009BE2] text-white font-semibold py-3 rounded-lg hover:bg-[#0089c8] transition duration-300">
+  Subscribe
+</button>
+  </form>
+</div>
+  <div>
+    <h3 class="text-2xl font-bold mb-2">Dwip Unnayan Songstha</h3>
+    <p class="text-gray-200">
+      Building resilient coastal communities through sustainable development,
+      health, education, and climate action.
+    </p>
   </div>
 
-  <div class="container mx-auto px-4 relative z-10">
-    <h2 class="text-4xl font-bold text-center mb-12 text-green-700">Our Impact</h2>
-
-    <!-- Grid for 6 circles -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 text-center">
-      <div class="flex flex-col items-center" data-target="1500" data-label="Children Educated"></div>
-      <div class="flex flex-col items-center" data-target="250" data-label="Families Supported"></div>
-      <div class="flex flex-col items-center" data-target="80" data-label="Community Centers"></div>
-      <div class="flex flex-col items-center" data-target="500" data-label="Healthcare Services"></div>
-      <div class="flex flex-col items-center" data-target="120" data-label="Women Empowered"></div>
-      <div class="flex flex-col items-center" data-target="30" data-label="Partnerships Formed"></div>
-    </div>
+  <div>
+    <h4 class="font-semibold mb-2">Quick Links</h4>
+    <ul class="space-y-1 text-gray-200">
+      <li><a href="About_Us.html" class="hover:text-yellow-300">About Us</a></li>
+      <li><a href="Project.html" class="hover:text-yellow-300">Projects</a></li>
+      <li><a href="Research.html" class="hover:text-yellow-300">Research</a></li>
+      <li><a href="Blog.html" class="hover:text-yellow-300">Blog</a></li>
+    </ul>
   </div>
-</section>
 
-<style>
-  .circle-counter {
-    position: relative;
-    width: 10rem;
-    height: 10rem;
-    border-radius: 50%;
-    border: 8px solid white; /* thick white stroke */
-    background-color: #009346; /* green fill */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .counter {
-    color: white;
-    font-weight: 700;
-    font-size: 2.25rem;
-  }
-
-  .circle-label {
-    font-size: 1.125rem;
-    color: #374151;
-    font-weight: 500;
-    margin-top: 1rem;
-  }
-</style>
-
-<script>
-  // Create counters dynamically
-  const gridItems = document.querySelectorAll('#success .flex.flex-col.items-center');
-
-  gridItems.forEach(item => {
-    const target = +item.getAttribute('data-target');
-    const label = item.getAttribute('data-label');
-
-    item.innerHTML = `
-      <div class="circle-counter mb-4">
-        <span class="counter">0</span>
-      </div>
-      <p class="circle-label">${label}</p>
-    `;
-  });
-
-  const counters = document.querySelectorAll('.counter');
-  const speed = 80;
-
-  const animateCounters = () => {
-    counters.forEach(counter => {
-      const target = +counter.closest('[data-target]').getAttribute('data-target');
-
-      const updateCount = () => {
-        const count = +counter.innerText;
-        const increment = target / speed;
-
-        if (count < target) {
-          counter.innerText = Math.ceil(count + increment);
-          setTimeout(updateCount, 20);
-        } else {
-          counter.innerText = target;
-        }
-      };
-      updateCount();
-    });
-  };
-
-  let triggered = false;
-  window.addEventListener('scroll', () => {
-    const section = document.getElementById('success');
-    const sectionTop = section.offsetTop - window.innerHeight + 200;
-    if (!triggered && window.scrollY > sectionTop) {
-      animateCounters();
-      triggered = true;
-    }
-  });
-</script>
-
-
-  <!-- Logo Carousel Section -->
-<section class="py-16 bg-white">
-  <h2 class="text-4xl font-bold text-center mb-8">Our Partners</h2>
-  <div class="logo-slider overflow-hidden relative">
-    <div class="logo-track flex gap-12 items-center">
-      <!-- Logo Items -->
-      <img src="image/partners/partner1.png" alt="Logo 1" class="h-20">
-      <img src="image/partners/partner2.png" alt="Logo 2" class="h-20">
-      <img src="image/partners/partner3.png" alt="Logo 3" class="h-20">
-      <img src="image/partners/partner4.png" alt="Logo 4" class="h-20">
-      <img src="image/partners/partner5.png" alt="Logo 5" class="h-20">
-      <img src="image/partners/partner6.png" alt="Logo 6" class="h-20">
-      <img src="image/partners/partner7.png" alt="Logo 7" class="h-20">
-      <img src="image/partners/partner8.png" alt="Logo 8" class="h-20">
-      <img src="image/partners/partner9.png" alt="Logo 9" class="h-20">
-      <img src="image/partners/partner.png" alt="Logo 10" class="h-20">
-
-      <!-- Duplicate logos for seamless loop -->
-      <img src="image/partners/partner1.png" alt="Logo 1" class="h-20">
-      <img src="image/partners/partner2.png" alt="Logo 2" class="h-20">
-      <img src="image/partners/partner3.png" alt="Logo 3" class="h-20">
-      <img src="image/partners/partner4.png" alt="Logo 4" class="h-20">
-      <img src="image/partners/partner5.png" alt="Logo 5" class="h-20">
-      <img src="image/partners/partner6.png" alt="Logo 6" class="h-20">
-      <img src="image/partners/partner7.png" alt="Logo 7" class="h-20">
-      <img src="image/partners/partner8.png" alt="Logo 8" class="h-20">
-      <img src="image/partners/partner9.png" alt="Logo 9" class="h-20">
-      <img src="image/partners/partner.png" alt="Logo 10" class="h-20">
-    </div>
+  <div>
+    <h4 class="font-semibold mb-2">Contact</h4>
+    <p class="text-gray-200">Dhaka, Bangladesh</p>
+    <p class="text-gray-200">info@dus.ngo</p>
+    <p class="text-gray-200">+880248110362</p>
   </div>
-</section>
+  <!-- Social Media -->
+<div class="mt-6">
+  <h4 class="text-lg font-semibold mb-3">Follow Us</h4>
 
-<style>
-  /* Container setup */
-  .logo-slider {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-  }
+  <div class="flex gap-4">
 
-  /* Track with infinite scroll */
-  .logo-track {
-    display: flex;
-    width: max-content;
-    animation: scroll-left 40s linear infinite;
-  }
+    <a href="https://www.facebook.com/profile.php?id=61592724257564" target="_blank"
+       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#009BE2] transition duration-300">
+      <i class="fa-brands fa-facebook-f text-white text-lg"></i>
+    </a>
 
-  /* Smooth scroll animation */
-  @keyframes scroll-left {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
+    <a href="https://www.linkedin.com/company/72018379/admin/page-posts/published/" target="_blank"
+       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#009BE2] transition duration-300">
+      <i class="fa-brands fa-linkedin-in text-white text-lg"></i>
+    </a>
 
-  /* Optional: pause on hover */
-  .logo-slider:hover .logo-track {
-    animation-play-state: paused;
-  }
-</style>
+    <a href="https://www.youtube.com/@dwipunnayansongstha" target="_blank"
+       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#009BE2] transition duration-300">
+      <i class="fa-brands fa-youtube text-white text-lg"></i>
+    </a>
 
+    <a href="https:https://www.instagram.com/dwipunnayansongstha/" target="_blank"
+       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#009BE2] transition duration-300">
+      <i class="fa-brands fa-instagram text-white text-lg"></i>
+    </a>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-8">
-    <div class="container mx-auto text-center">
-      <p>&copy; 2025 Grambangla Unnayan Committee. All Rights Reserved.</p>
-    </div>
-  </footer>
+    <a href="https://x.com/dusngobd" target="_blank"
+       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#009BE2] transition duration-300">
+      <i class="fa-brands fa-x-twitter text-white text-lg"></i>
+    </a>
 
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  </div>
+</div>
+ 
 
-</body>
-</html>
+</div>
+
+<div class="border-t border-white/20 mt-6 pt-4 text-center text-sm text-gray-300">
+  © 2026 Dwip Unnayan Songstha. All Rights Reserved.
+</div>
+
+  </div>
+</footer>
+
