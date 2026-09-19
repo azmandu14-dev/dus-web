@@ -861,3 +861,249 @@
   </div>
 
 </footer>
+
+import openpyxl
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
+
+wb = openpyxl.Workbook()
+wb.remove(wb.active) # Remove default sheet
+
+# Styling constants
+HEADER_FILL = PatternFill(start_color="1F4E78", end_color="1F4E78", fill_type="solid")
+HEADER_FONT = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
+BOLD_FONT = Font(name="Calibri", size=10, bold=True)
+REGULAR_FONT = Font(name="Calibri", size=10)
+
+THIN_BORDER = Border(
+    left=Side(style='thin', color='D9D9D9'),
+    right=Side(style='thin', color='D9D9D9'),
+    top=Side(style='thin', color='D9D9D9'),
+    bottom=Side(style='thin', color='D9D9D9')
+)
+
+branches = ["Branch 1", "Branch 2", "Branch 3", "Branch 4", "Branch 5"]
+months = ["July 2026", "August 2026", "September 2026", "October 2026", "November 2026", "December 2026",
+          "January 2027", "February 2027", "March 2027", "April 2027", "May 2027", "June 2027"]
+
+# ---------------------------------------------------------
+# TAB 1: Control & Setup
+# ---------------------------------------------------------
+ws1 = wb.create_sheet(title="Control & Setup")
+ws1.views.sheetView[0].showGridLines = True
+
+ws1['A1'] = "PKSF Preventive Healthcare Program - DUS Monitoring Tool"
+ws1['A1'].font = Font(name="Calibri", size=16, bold=True, color="1F4E78")
+
+ws1['A3'] = "Organization Information"
+ws1['A3'].font = Font(name="Calibri", size=12, bold=True)
+ws1['A4'] = "Organization Name:"
+ws1['B4'] = "Dwip Unnayan Songstha (DUS)"
+ws1['A5'] = "Total Project Branches:"
+ws1['B5'] = 5
+ws1['A6'] = "Target Beneficiaries:"
+ws1['B6'] = "Microfinance Members & Family Members"
+ws1['A7'] = "Excluded Components:"
+ws1['B7'] = "Telemedicine (Not implemented by DUS)"
+
+ws1['A9'] = "Designated Branches"
+ws1['A9'].font = Font(name="Calibri", size=12, bold=True)
+headers_setup = ["Branch ID", "Branch Name", "District", "Upazila"]
+for col_num, h_text in enumerate(headers_setup, 1):
+    cell = ws1.cell(row=10, column=col_num)
+    cell.value = h_text
+    cell.font = HEADER_FONT
+    cell.fill = HEADER_FILL
+
+for idx, b in enumerate(branches, start=11):
+    ws1[f'A{idx}'] = f"BR-0{idx-10}"
+    ws1[f'B{idx}'] = b
+    ws1[f'C{idx}'] = "Target District"
+    ws1[f'D{idx}'] = "Target Upazila"
+
+# ---------------------------------------------------------
+# TAB 2: Monthly Branch Data
+# ---------------------------------------------------------
+ws2 = wb.create_sheet(title="Monthly Branch Data")
+ws2.views.sheetView[0].showGridLines = True
+
+headers_ws2 = [
+    "Branch Name", "Month", "Active Health Cards", "Static Clinics Held", "Static Patients",
+    "Satellite Clinics Held", "Satellite Patients", "ANC Checkups", "PNC Checkups",
+    "GMP Monitored Children", "SAM/MAM Identified", "Health Camps Held", "Health Camp Beneficiaries",
+    "Eye Camps Held", "Eye Camp Beneficiaries", "Cataract Operations", "Referrals (Govt/Pvt)",
+    "Shurokkha Claims Approved", "Shurokkha Payout (BDT)"
+]
+
+ws2.row_dimensions[1].height = 28
+for col_num, h_text in enumerate(headers_ws2, 1):
+    cell = ws2.cell(row=1, column=col_num)
+    cell.value = h_text
+    cell.font = HEADER_FONT
+    cell.fill = HEADER_FILL
+    cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+row_idx = 2
+for m in months:
+    for b in branches:
+        ws2.cell(row=row_idx, column=1, value=b).alignment = Alignment(horizontal="left")
+        ws2.cell(row=row_idx, column=2, value=m).alignment = Alignment(horizontal="center")
+        for c in range(3, 20):
+            cell = ws2.cell(row=row_idx, column=c, value=0)
+            cell.alignment = Alignment(horizontal="right")
+            cell.border = THIN_BORDER
+            if c == 19:
+                cell.number_format = '#,##0.00'
+            else:
+                cell.number_format = '#,##0'
+        row_idx += 1
+
+# ---------------------------------------------------------
+# TAB 3: Quarterly Summary
+# ---------------------------------------------------------
+ws3 = wb.create_sheet(title="Quarterly Summary")
+ws3.views.sheetView[0].showGridLines = True
+
+ws3['A1'] = "Quarterly Consolidated Performance Monitoring"
+ws3['A1'].font = Font(name="Calibri", size=14, bold=True, color="1F4E78")
+
+headers_ws3 = ["Indicator / Service Delivery Category", "Q1 (Jul-Sep)", "Q2 (Oct-Dec)", "Q3 (Jan-Mar)", "Q4 (Apr-Jun)", "Annual Total"]
+for col_num, h_text in enumerate(headers_ws3, 1):
+    cell = ws3.cell(row=3, column=col_num)
+    cell.value = h_text
+    cell.font = HEADER_FONT
+    cell.fill = HEADER_FILL
+    cell.alignment = Alignment(horizontal="center", vertical="center")
+
+q_metrics = [
+    ("Static Clinics Held", 4),
+    ("Static Clinic Patients", 5),
+    ("Satellite Clinics Held", 6),
+    ("Satellite Clinic Patients", 7),
+    ("Maternal Health: ANC Checkups Received", 8),
+    ("Maternal Health: PNC Checkups Received", 9),
+    ("Child Health: GMP Coverage (0-59 Months)", 10),
+    ("Child Health: SAM/MAM Identified", 11),
+    ("Outreach: Health Camps Organized", 12),
+    ("Outreach: Health Camp Beneficiaries", 13),
+    ("Outreach: Eye Camps Organized", 14),
+    ("Outreach: Eye Camp Beneficiaries", 15),
+    ("Outreach: Cataract Operations Completed", 16),
+    ("Referrals to Govt/Private Facilities", 17),
+    ("Shurokkha Risk Claims Beneficiaries", 18),
+    ("Shurokkha Financial Payout Amount (BDT)", 19)
+]
+
+r_idx = 4
+for label, col_num in q_metrics:
+    ws3.cell(row=r_idx, column=1, value=label).font = BOLD_FONT
+    col_let = get_column_letter(col_num)
+    
+    # Formula expressions for Q1, Q2, Q3, Q4
+    ws3.cell(row=r_idx, column=2, value=f"=SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"July 2026\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"August 2026\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"September 2026\")")
+    ws3.cell(row=r_idx, column=3, value=f"=SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"October 2026\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"November 2026\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"December 2026\")")
+    ws3.cell(row=r_idx, column=4, value=f"=SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"January 2027\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"February 2027\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"March 2027\")")
+    ws3.cell(row=r_idx, column=5, value=f"=SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"April 2027\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"May 2027\") + SUMIFS('Monthly Branch Data'!{col_let}:{col_let}, 'Monthly Branch Data'!B:B, \"June 2027\")")
+    ws3.cell(row=r_idx, column=6, value=f"=SUM(B{r_idx}:E{r_idx})")
+    
+    for c in range(2, 7):
+        cell = ws3.cell(row=r_idx, column=c)
+        cell.border = THIN_BORDER
+        if col_num == 19:
+            cell.number_format = '#,##0.00'
+        else:
+            cell.number_format = '#,##0'
+    r_idx += 1
+
+# ---------------------------------------------------------
+# TAB 4: Annual Impact Dashboard
+# ---------------------------------------------------------
+ws4 = wb.create_sheet(title="Annual Impact Dashboard")
+ws4.views.sheetView[0].showGridLines = True
+
+ws4['A1'] = "Preventive Healthcare Program - Annual Key Performance Indicators (KPIs)"
+ws4['A1'].font = Font(name="Calibri", size=14, bold=True, color="1F4E78")
+
+dash_headers = ["KPI Code", "Key Performance Indicator (PKSF Aligned)", "Baseline / Target", "Achieved (Annual Total)", "Status / Progress"]
+for col_num, h_text in enumerate(dash_headers, 1):
+    cell = ws4.cell(row=3, column=col_num)
+    cell.value = h_text
+    cell.font = HEADER_FONT
+    cell.fill = HEADER_FILL
+    cell.alignment = Alignment(horizontal="center", vertical="center")
+
+kpis = [
+    ("KPI-01", "Maternal Care: Total ANC Checkups Conducted", "Target: 1,000", "='Quarterly Summary'!F8"),
+    ("KPI-02", "Postnatal Care: Total PNC Checkups Conducted", "Target: 800", "='Quarterly Summary'!F9"),
+    ("KPI-03", "Child Nutrition: GMP Sessions Conducted (0-59m)", "Target: 2,500", "='Quarterly Summary'!F10"),
+    ("KPI-04", "Early Identification: SAM/MAM Cases Identified", "Tracking Metric", "='Quarterly Summary'!F11"),
+    ("KPI-05", "Outreach Services: Specialized Health/Eye Camp Patients", "Target: 1,500", "='Quarterly Summary'!F13 + 'Quarterly Summary'!F15"),
+    ("KPI-06", "Outreach Services: Cataract Operations Facilitated", "Target: 50", "='Quarterly Summary'!F16"),
+    ("KPI-07", "Continuity of Care: Patient Referrals to Facility", "Tracking Metric", "='Quarterly Summary'!F17"),
+    ("KPI-08", "Shurokkha Risk Protection: Claims Approved", "Tracking Metric", "='Quarterly Summary'!F18"),
+    ("KPI-09", "Shurokkha Financial Resilience: Total Financial Assistance Disbursed (BDT)", "Tracking Metric", "='Quarterly Summary'!F19")
+]
+
+for idx, (code, desc, target, formula) in enumerate(kpis, start=4):
+    ws4.cell(row=idx, column=1, value=code).alignment = Alignment(horizontal="center")
+    ws4.cell(row=idx, column=2, value=desc).font = BOLD_FONT
+    ws4.cell(row=idx, column=3, value=target).alignment = Alignment(horizontal="center")
+    
+    cell_achieved = ws4.cell(row=idx, column=4, value=formula)
+    cell_achieved.font = BOLD_FONT
+    cell_achieved.alignment = Alignment(horizontal="right")
+    if code == "KPI-09":
+        cell_achieved.number_format = '#,##0.00'
+    else:
+        cell_achieved.number_format = '#,##0'
+        
+    ws4.cell(row=idx, column=5, value="On Track").alignment = Alignment(horizontal="center")
+    
+    for c in range(1, 6):
+        ws4.cell(row=idx, column=c).border = THIN_BORDER
+
+# ---------------------------------------------------------
+# TAB 5: Shurokkha Tracker
+# ---------------------------------------------------------
+ws5 = wb.create_sheet(title="Shurokkha Tracker")
+ws5.views.sheetView[0].showGridLines = True
+
+ws5['A1'] = "Shurokkha Risk Protection Services - Payout Register"
+ws5['A1'].font = Font(name="Calibri", size=14, bold=True, color="1F4E78")
+
+shurokkha_headers = [
+    "Claim ID", "Date", "Branch", "Member Name", "Member ID", "Risk Coverage Category",
+    "Specific Benefit / Procedure", "PKSF Defined Ceiling (BDT)", "Approved Payout (BDT)", "Status"
+]
+
+for col_num, h_text in enumerate(shurokkha_headers, 1):
+    cell = ws5.cell(row=3, column=col_num)
+    cell.value = h_text
+    cell.font = HEADER_FONT
+    cell.fill = HEADER_FILL
+    cell.alignment = Alignment(horizontal="center", vertical="center")
+
+for r in range(4, 20):
+    ws5.cell(row=r, column=1, value=f"CLM-{r-3:04d}").alignment = Alignment(horizontal="center")
+    ws5.cell(row=r, column=8, value=8000.00).number_format = '#,##0.00'
+    ws5.cell(row=r, column=9, value=0.00).number_format = '#,##0.00'
+    for c in range(1, 11):
+        ws5.cell(row=r, column=c).border = THIN_BORDER
+
+# Column Width Adjustments
+for sheet in wb.worksheets:
+    for col in sheet.columns:
+        max_len = 0
+        col_letter = get_column_letter(col[0].column)
+        for cell in col:
+            if cell.row in [1, 2] and sheet.title in ["Quarterly Summary", "Annual Impact Dashboard", "Shurokkha Tracker"]:
+                continue
+            if cell.value:
+                val_str = str(cell.value)
+                if len(val_str) > max_len:
+                    max_len = len(val_str)
+        sheet.column_dimensions[col_letter].width = max(max_len + 4, 12)
+
+file_path = "DUS_Preventive_Healthcare_Monitoring_Tool-v2.xlsx"
+wb.save(file_path)
+print(f"File successfully created: {file_path}")
