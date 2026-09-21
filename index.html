@@ -351,65 +351,6 @@
 
 
 <!-- =========================================
-     DUS WORKING AREA MAP
-========================================= -->
-
-<section id="working-area-map" class="py-16 bg-white">
-
-  <div class="container mx-auto px-4">
-
-    <!-- Section Heading -->
-    <div class="text-center mb-10">
-
-      <h2 class="text-4xl font-bold text-gray-800 mb-3">
-        Our Working Areas
-      </h2>
-
-      <p class="text-gray-600 max-w-2xl mx-auto">
-        DUS is working across selected districts of Bangladesh
-        to support vulnerable and underserved communities.
-      </p>
-
-    </div>
-
-    <!-- Map -->
-    <div
-      id="bangladesh-map"
-      class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-    </div>
-
-    <!-- Legend -->
-    <div class="flex flex-wrap justify-center gap-6 mt-6 text-sm">
-
-      <div class="flex items-center">
-        <span
-          class="w-5 h-5 rounded-sm mr-2"
-          style="background:#009BE2;">
-        </span>
-
-        <span class="text-gray-700">
-          DUS Working Areas
-        </span>
-      </div>
-
-      <div class="flex items-center">
-        <span
-          class="w-5 h-5 rounded-sm mr-2 bg-white border-2 border-[#009BE2]">
-        </span>
-
-        <span class="text-gray-700">
-          Other Districts
-        </span>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================
      LEAFLET MAP
 ========================================= -->
 
@@ -429,21 +370,52 @@
     background: #f8fafc;
   }
 
-  /* District name shown when hovering */
+
+  /* =========================================
+     DISTRICT POLYGON
+  ========================================= */
+
+  .leaflet-interactive {
+
+    transition:
+      fill-opacity 0.2s ease,
+      stroke-width 0.2s ease,
+      filter 0.2s ease;
+
+  }
+
+
+  /* =========================================
+     HOVER DISTRICT NAME
+  ========================================= */
+
   .district-hover-label {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    color: white;
+
+    background: transparent !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    color: #ffffff !important;
+
+    font-size: 14px;
+
     font-weight: 700;
-    font-size: 13px;
+
     text-shadow:
       1px 1px 3px rgba(0,0,0,0.8),
       -1px -1px 3px rgba(0,0,0,0.8);
+
+    pointer-events: none;
+
   }
 
+
   .district-hover-label::before {
-    display: none;
+
+    display: none !important;
+
   }
 
 </style>
@@ -452,6 +424,7 @@
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
+
 
   /* =========================================
      CREATE MAP
@@ -492,14 +465,13 @@ document.addEventListener("DOMContentLoaded", function () {
     "Cox's Bazar",
     "Coxs Bazar",
 
-    "Bhola",
     "Bhola"
 
   ];
 
 
   /* =========================================
-     NORMALIZE DISTRICT NAMES
+     NORMALIZE NAME
   ========================================= */
 
   function normalizeName(name) {
@@ -518,7 +490,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   /* =========================================
-     CHECK WORKING AREA
+     CHECK WORKING DISTRICT
   ========================================= */
 
   function isWorkingDistrict(name) {
@@ -580,7 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
       getDistrictName(feature);
 
 
-    /* DUS WORKING AREA */
+    /* WORKING AREA */
 
     if (isWorkingDistrict(districtName)) {
 
@@ -588,11 +560,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fillColor: "#009BE2",
 
-        fillOpacity: 0.88,
+        fillOpacity: 0.95,
 
-        color: "#006FA6",
+        color: "#009BE2",
 
-        weight: 1.5,
+        weight: 0.8,
 
         opacity: 1
 
@@ -611,7 +583,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       color: "#009BE2",
 
-      weight: 1.2,
+      weight: 0.8,
 
       opacity: 1
 
@@ -648,7 +620,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =====================================
-         CREATE DISTRICT LAYER
+         GEOJSON
       ===================================== */
 
       districtLayer = L.geoJSON(data, {
@@ -662,95 +634,145 @@ document.addEventListener("DOMContentLoaded", function () {
 
         onEachFeature: function(feature, layer) {
 
+
           const districtName =
             getDistrictName(feature);
 
 
           /* =================================
-             HOVER
+             MOUSE OVER
           ================================= */
 
-          layer.on({
-
-            mouseover: function(e) {
-
-              const hoveredLayer =
-                e.target;
+          layer.on("mouseover", function(e) {
 
 
-              /* Make boundary stronger */
-
-              hoveredLayer.setStyle({
-
-                weight: 3,
-
-                color: "#1d4ed8",
-
-                fillOpacity:
-                  isWorkingDistrict(districtName)
-                    ? 1
-                    : 0.75
-
-              });
+            const hoveredLayer =
+              e.target;
 
 
-              hoveredLayer.bringToFront();
+            /* Bring district forward */
 
-
-              /* =============================
-                 SHOW DISTRICT NAME
-              ============================= */
-
-              hoveredLayer.bindTooltip(
-
-                districtName,
-
-                {
-
-                  permanent: false,
-
-                  direction: "center",
-
-                  className:
-                    "district-hover-label",
-
-                  opacity: 1
-
-                }
-
-              ).openTooltip();
-
-            },
+            hoveredLayer.bringToFront();
 
 
             /* =================================
-               MOUSE OUT
+               SUBTLE HOVER EFFECT
             ================================= */
 
-            mouseout: function(e) {
+            hoveredLayer.setStyle({
 
-              districtLayer.resetStyle(e.target);
+              fillOpacity: 1,
 
-              e.target.closeTooltip();
+              weight: 0.8,
 
-            },
+              color: "#009BE2"
+
+            });
 
 
             /* =================================
-               CLICK
+               SMALL VISUAL SCALE EFFECT
             ================================= */
 
-            click: function() {
+            const path =
+              hoveredLayer._path;
 
-              layer.bindPopup(
 
-                "<strong>" +
-                districtName +
-                "</strong>"
+            if (path) {
 
-              ).openPopup();
+              path.style.filter =
+                "drop-shadow(0px 3px 4px rgba(0,0,0,0.25))";
+
+              path.style.transformOrigin =
+                "center center";
+
+              path.style.transform =
+                "scale(1.025)";
 
             }
+
+
+            /* =================================
+               SHOW DISTRICT NAME
+            ================================= */
+
+            hoveredLayer.bindTooltip(
+
+              districtName,
+
+              {
+
+                permanent: false,
+
+                direction: "center",
+
+                className:
+                  "district-hover-label",
+
+                opacity: 1
+
+              }
+
+            ).openTooltip();
+
+          });
+
+
+          /* =================================
+             MOUSE OUT
+          ================================= */
+
+          layer.on("mouseout", function(e) {
+
+
+            const hoveredLayer =
+              e.target;
+
+
+            /* Reset district */
+
+            districtLayer.resetStyle(
+              hoveredLayer
+            );
+
+
+            /* Remove scale */
+
+            const path =
+              hoveredLayer._path;
+
+
+            if (path) {
+
+              path.style.transform =
+                "";
+
+              path.style.filter =
+                "";
+
+            }
+
+
+            /* Remove district name */
+
+            hoveredLayer.closeTooltip();
+
+          });
+
+
+          /* =================================
+             CLICK
+          ================================= */
+
+          layer.on("click", function() {
+
+            layer.bindPopup(
+
+              "<strong>" +
+              districtName +
+              "</strong>"
+
+            ).openPopup();
 
           });
 
@@ -760,7 +782,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       /* =====================================
-         FIT BANGLADESH MAP
+         FIT MAP
       ===================================== */
 
       map.fitBounds(
@@ -805,7 +827,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
 
 <!-- =========================================
      RESPONSIVE FOOTER
