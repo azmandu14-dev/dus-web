@@ -358,10 +358,7 @@
 
   <div class="container mx-auto px-4">
 
-    <!-- =====================================
-         SECTION HEADING
-    ====================================== -->
-
+    <!-- SECTION HEADING -->
     <div class="text-center mb-10">
 
       <h2 class="text-4xl font-bold text-gray-800 mb-3">
@@ -376,23 +373,15 @@
     </div>
 
 
-    <!-- =====================================
-         MAP
-    ====================================== -->
-
+    <!-- MAP -->
     <div
       id="bangladesh-map"
       class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
     </div>
 
 
-    <!-- =====================================
-         LEGEND
-    ====================================== -->
-
+    <!-- LEGEND -->
     <div class="flex flex-wrap justify-center gap-6 mt-6 text-sm">
-
-      <!-- Working Areas -->
 
       <div class="flex items-center">
 
@@ -407,8 +396,6 @@
 
       </div>
 
-
-      <!-- Other Districts -->
 
       <div class="flex items-center">
 
@@ -429,7 +416,6 @@
 </section>
 
 
-
 <!-- =========================================
      LEAFLET CSS
 ========================================= -->
@@ -440,9 +426,8 @@
 />
 
 
-
 <!-- =========================================
-     LEAFLET JAVASCRIPT
+     LEAFLET JS
 ========================================= -->
 
 <script
@@ -450,48 +435,22 @@
 </script>
 
 
-
-<!-- =========================================
-     MAP CUSTOM CSS
-========================================= -->
-
 <style>
 
   /* =========================================
-     MAP BACKGROUND
+     MAP
   ========================================= */
 
   #bangladesh-map {
-
     background: #f8fafc;
-
   }
 
 
   /* =========================================
-     DISTRICT POLYGON TRANSITION
+     HOVER DISTRICT NAME
   ========================================= */
 
-  #bangladesh-map .leaflet-interactive {
-
-    transition:
-
-      fill-opacity 0.2s ease,
-
-      stroke-width 0.2s ease,
-
-      filter 0.2s ease,
-
-      transform 0.2s ease;
-
-  }
-
-
-  /* =========================================
-     DISTRICT NAME ON HOVER
-  ========================================= */
-
-  .district-hover-label {
+  .district-name-label {
 
     background: transparent !important;
 
@@ -507,34 +466,39 @@
 
     text-align: center;
 
+    white-space: nowrap;
+
     text-shadow:
-
-      1px 1px 3px rgba(0, 0, 0, 0.85),
-
-      -1px -1px 3px rgba(0, 0, 0, 0.85),
-
-      0px 0px 4px rgba(0, 0, 0, 0.6);
+      1px 1px 3px rgba(0,0,0,0.9),
+      -1px -1px 3px rgba(0,0,0,0.9),
+      0px 0px 5px rgba(0,0,0,0.7);
 
     pointer-events: none;
 
   }
 
 
-  /* Remove Leaflet tooltip arrow */
-
-  .district-hover-label::before {
+  .district-name-label::before {
 
     display: none !important;
 
   }
 
+
+  /* =========================================
+     DISTRICT SMOOTH EFFECT
+  ========================================= */
+
+  #bangladesh-map .leaflet-interactive {
+
+    transition:
+      filter 0.2s ease,
+      fill-opacity 0.2s ease;
+
+  }
+
 </style>
 
-
-
-<!-- =========================================
-     MAP JAVASCRIPT
-========================================= -->
 
 <script>
 
@@ -549,87 +513,99 @@ document.addEventListener("DOMContentLoaded", function () {
 
     zoomControl: true,
 
-    scrollWheelZoom: false
+    scrollWheelZoom: false,
+
+    doubleClickZoom: true
 
   });
 
 
-
   /* =========================================
      DUS WORKING DISTRICTS
+
+     These are the districts that MUST
+     appear BLUE.
   ========================================= */
 
   const workingDistricts = [
 
-    "Dhaka",
+    "dhaka",
 
-    "Noakhali",
+    "noakhali",
 
-    "Cumilla",
-    "Comilla",
+    "cumilla",
+    "comilla",
 
-    "Lakshmipur",
-    "Laxmipur",
+    "lakshmipur",
+    "laxmipur",
 
-    "Chandpur",
+    "chandpur",
 
-    "Feni",
+    "feni",
 
-    "Chattogram",
-    "Chittagong",
+    "chattogram",
+    "chittagong",
 
-    "Cox's Bazar",
-    "Coxs Bazar",
+    "coxsbazar",
+    "cox'sbazar",
+    "cox's bazar",
 
-    "Bhola"
+    "bhola"
 
   ];
 
 
-
   /* =========================================
-     NORMALIZE DISTRICT NAMES
+     NORMALIZE TEXT
+
+     This removes spaces, apostrophes,
+     hyphens etc. so different spellings
+     can still match.
   ========================================= */
 
-  function normalizeName(name) {
+  function normalizeName(value) {
 
-    return String(name)
+    return String(value || "")
 
       .toLowerCase()
 
       .trim()
 
-      .replace(/['’]/g, "")
+      .replace(/['’`]/g, "")
 
-      .replace(/\s+/g, " ");
+      .replace(/[-_]/g, "")
+
+      .replace(/\s+/g, "");
 
   }
 
 
-
   /* =========================================
-     CHECK WORKING DISTRICT
+     CHECK WHETHER A NAME IS WORKING AREA
   ========================================= */
 
   function isWorkingDistrict(name) {
 
-    const normalizedName =
+    const normalized =
       normalizeName(name);
 
 
     return workingDistricts.some(function (district) {
 
-      return normalizeName(district)
-        === normalizedName;
+      return normalizeName(district) === normalized;
 
     });
 
   }
 
 
-
   /* =========================================
-     GET DISTRICT NAME FROM GEOJSON
+     FIND DISTRICT NAME
+
+     IMPORTANT:
+     Instead of depending on NAME_2 only,
+     this checks ALL properties in the
+     GeoJSON feature.
   ========================================= */
 
   function getDistrictName(feature) {
@@ -638,30 +614,151 @@ document.addEventListener("DOMContentLoaded", function () {
       feature.properties || {};
 
 
-    return (
+    /* First check the common property names */
 
-      properties.DISTRICT ||
+    const preferredNames = [
 
-      properties.District ||
+      "NAME_2",
 
-      properties.district ||
+      "name_2",
 
-      properties.NAME_2 ||
+      "NAME2",
 
-      properties.name_2 ||
+      "NAME",
 
-      properties.NAME ||
+      "Name",
 
-      properties.Name ||
+      "name",
 
-      properties.name ||
+      "DISTRICT",
 
-      "District"
+      "District",
 
-    );
+      "district",
+
+      "ADM2_EN",
+
+      "ADM2_NAME",
+
+      "DISTRICT_NAME",
+
+      "District_Name",
+
+      "district_name",
+
+      "shapeName",
+
+      "ShapeName"
+
+    ];
+
+
+    for (let i = 0; i < preferredNames.length; i++) {
+
+      const key =
+        preferredNames[i];
+
+
+      if (
+
+        properties[key] !== undefined &&
+
+        properties[key] !== null &&
+
+        String(properties[key]).trim() !== ""
+
+      ) {
+
+        return String(properties[key]).trim();
+
+      }
+
+    }
+
+
+    /* -----------------------------------------
+       If not found, check ALL properties
+    ----------------------------------------- */
+
+    const keys =
+      Object.keys(properties);
+
+
+    for (let i = 0; i < keys.length; i++) {
+
+      const value =
+        properties[keys[i]];
+
+
+      if (
+
+        typeof value === "string" &&
+
+        value.trim() !== ""
+
+      ) {
+
+        if (isWorkingDistrict(value)) {
+
+          return value.trim();
+
+        }
+
+      }
+
+    }
+
+
+    return "District";
 
   }
 
+
+  /* =========================================
+     CHECK FEATURE USING ALL PROPERTIES
+
+     This is the important part.
+
+     Even if your GeoJSON stores the
+     district name in an unexpected field,
+     it can still identify the working area.
+  ========================================= */
+
+  function featureIsWorkingArea(feature) {
+
+    const properties =
+      feature.properties || {};
+
+
+    const keys =
+      Object.keys(properties);
+
+
+    for (let i = 0; i < keys.length; i++) {
+
+      const value =
+        properties[keys[i]];
+
+
+      if (typeof value !== "string") {
+
+        continue;
+
+      }
+
+
+      if (isWorkingDistrict(value)) {
+
+        return true;
+
+      }
+
+    }
+
+
+    return false;
+
+  }
 
 
   /* =========================================
@@ -670,25 +767,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function districtStyle(feature) {
 
-    const districtName =
-      getDistrictName(feature);
 
+    /* =======================================
+       WORKING AREA = BLUE
+    ======================================= */
 
-    /* -----------------------------------------
-       DUS WORKING AREA
-    ----------------------------------------- */
-
-    if (isWorkingDistrict(districtName)) {
+    if (featureIsWorkingArea(feature)) {
 
       return {
 
         fillColor: "#009BE2",
 
-        fillOpacity: 0.95,
+        fillOpacity: 1,
 
         color: "#009BE2",
 
-        weight: 0.8,
+        weight: 0.7,
 
         opacity: 1
 
@@ -697,9 +791,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* -----------------------------------------
-       OTHER DISTRICTS
-    ----------------------------------------- */
+    /* =======================================
+       OTHER DISTRICTS = WHITE
+    ======================================= */
 
     return {
 
@@ -709,7 +803,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       color: "#009BE2",
 
-      weight: 0.8,
+      weight: 0.7,
 
       opacity: 1
 
@@ -718,25 +812,23 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
   let districtLayer;
 
 
-
   /* =========================================
-     LOAD BANGLADESH DISTRICT GEOJSON
+     LOAD GEOJSON
   ========================================= */
 
   fetch("bangladesh_districts.geojson")
 
 
-    .then(function (response) {
+    .then(function(response) {
 
 
       if (!response.ok) {
 
         throw new Error(
-          "Could not load bangladesh_districts.geojson"
+          "GeoJSON file could not be loaded."
         );
 
       }
@@ -747,7 +839,13 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
 
-    .then(function (data) {
+    .then(function(data) {
+
+
+      console.log(
+        "Bangladesh GeoJSON loaded:",
+        data
+      );
 
 
       /* =====================================
@@ -757,48 +855,62 @@ document.addEventListener("DOMContentLoaded", function () {
       districtLayer = L.geoJSON(data, {
 
 
-        /* -----------------------------------
-           APPLY DISTRICT STYLE
-        ----------------------------------- */
+        style: function(feature) {
 
-        style: districtStyle,
+          return districtStyle(feature);
+
+        },
 
 
-        /* -----------------------------------
-           INTERACTION WITH EACH DISTRICT
-        ----------------------------------- */
+        /* ===================================
+           DISTRICT INTERACTION
+        =================================== */
 
-        onEachFeature: function (feature, layer) {
+        onEachFeature: function(feature, layer) {
 
 
           const districtName =
             getDistrictName(feature);
 
 
+          const isWorking =
+            featureIsWorkingArea(feature);
+
+
+          console.log(
+
+            districtName,
+
+            "Working Area:",
+
+            isWorking
+
+          );
+
 
           /* =================================
              MOUSE OVER
           ================================= */
 
-          layer.on("mouseover", function (e) {
+          layer.on("mouseover", function(e) {
 
 
-            const hoveredLayer =
+            const selectedLayer =
               e.target;
 
 
-            /* Bring selected district forward */
+            /* Bring district to front */
 
-            hoveredLayer.bringToFront();
+            selectedLayer.bringToFront();
 
 
             /* --------------------------------
-               Keep thin boundary
+               Keep boundary THIN
             -------------------------------- */
 
-            hoveredLayer.setStyle({
+            selectedLayer.setStyle({
 
-              weight: 0.8,
+              weight: 0.7,
 
               color: "#009BE2",
 
@@ -807,103 +919,87 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
 
-
             /* =================================
-               SMALL HOVER SCALE EFFECT
+               SUBTLE HOVER EFFECT
             ================================= */
 
-            const path =
-              hoveredLayer._path;
+            if (selectedLayer._path) {
 
+              selectedLayer._path.style.filter =
 
-            if (path) {
-
-              path.style.filter =
-                "drop-shadow(0px 3px 5px rgba(0,0,0,0.25))";
-
-              path.style.transformOrigin =
-                "center center";
-
-              path.style.transform =
-                "scale(1.025)";
+                "drop-shadow(0px 3px 5px rgba(0,0,0,0.35))";
 
             }
-
 
 
             /* =================================
                SHOW DISTRICT NAME
             ================================= */
 
-            hoveredLayer.bindTooltip(
+            selectedLayer.bindTooltip(
 
               districtName,
 
               {
 
-                permanent: false,
+                permanent: true,
 
                 direction: "center",
 
                 className:
-                  "district-hover-label",
+                  "district-name-label",
 
                 opacity: 1
 
               }
 
-            ).openTooltip();
+            );
+
+
+            selectedLayer.openTooltip();
 
           });
-
 
 
           /* =================================
              MOUSE OUT
           ================================= */
 
-          layer.on("mouseout", function (e) {
+          layer.on("mouseout", function(e) {
 
 
-            const hoveredLayer =
+            const selectedLayer =
               e.target;
 
 
             /* Restore original style */
 
             districtLayer.resetStyle(
-              hoveredLayer
+              selectedLayer
             );
 
 
-            /* Remove scale */
+            /* Remove shadow */
 
-            const path =
-              hoveredLayer._path;
+            if (selectedLayer._path) {
 
-
-            if (path) {
-
-              path.style.transform = "";
-
-              path.style.filter = "";
+              selectedLayer._path.style.filter = "";
 
             }
 
 
-            /* Hide district name */
+            /* Remove district name */
 
-            hoveredLayer.closeTooltip();
+            selectedLayer.closeTooltip();
 
           });
-
 
 
           /* =================================
              CLICK
           ================================= */
 
-          layer.on("click", function () {
+          layer.on("click", function() {
 
 
             layer.bindPopup(
@@ -921,9 +1017,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }).addTo(map);
 
 
-
       /* =====================================
-         AUTOMATICALLY FIT BANGLADESH
+         FIT BANGLADESH TO MAP
       ====================================== */
 
       map.fitBounds(
@@ -942,10 +1037,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================
-       ERROR HANDLING
+       ERROR
     ========================================= */
 
-    .catch(function (error) {
+    .catch(function(error) {
 
 
       console.error(
@@ -961,9 +1056,23 @@ document.addEventListener("DOMContentLoaded", function () {
         "bangladesh-map"
       ).innerHTML =
 
-        '<div class="flex items-center justify-center h-full text-red-500">' +
+        '<div class="flex items-center justify-center h-full text-red-500 px-5 text-center">' +
+
+        '<div>' +
+
+        '<p class="font-semibold mb-2">' +
 
         'Map data could not be loaded.' +
+
+        '</p>' +
+
+        '<p class="text-sm">' +
+
+        'Please check that bangladesh_districts.geojson is in the same folder as this HTML file.' +
+
+        '</p>' +
+
+        '</div>' +
 
         '</div>';
 
@@ -972,7 +1081,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
 <!-- =========================================
      RESPONSIVE FOOTER
 ========================================= -->
