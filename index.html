@@ -358,7 +358,10 @@
 
   <div class="container mx-auto px-4">
 
-    <!-- Section Heading -->
+    <!-- =====================================
+         SECTION HEADING
+    ====================================== -->
+
     <div class="text-center mb-10">
 
       <h2 class="text-4xl font-bold text-gray-800 mb-3">
@@ -372,16 +375,27 @@
 
     </div>
 
-    <!-- Map -->
+
+    <!-- =====================================
+         MAP
+    ====================================== -->
+
     <div
       id="bangladesh-map"
       class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
     </div>
 
-    <!-- Legend -->
+
+    <!-- =====================================
+         LEGEND
+    ====================================== -->
+
     <div class="flex flex-wrap justify-center gap-6 mt-6 text-sm">
 
+      <!-- Working Areas -->
+
       <div class="flex items-center">
+
         <span
           class="w-5 h-5 rounded-sm mr-2"
           style="background:#009BE2;">
@@ -390,16 +404,22 @@
         <span class="text-gray-700">
           DUS Working Areas
         </span>
+
       </div>
 
+
+      <!-- Other Districts -->
+
       <div class="flex items-center">
+
         <span
-          class="w-5 h-5 rounded-sm mr-2 bg-white border-2 border-[#009BE2]">
+          class="w-5 h-5 rounded-sm mr-2 bg-white border border-[#009BE2]">
         </span>
 
         <span class="text-gray-700">
           Other Districts
         </span>
+
       </div>
 
     </div>
@@ -409,8 +429,9 @@
 </section>
 
 
+
 <!-- =========================================
-     LEAFLET MAP
+     LEAFLET CSS
 ========================================= -->
 
 <link
@@ -418,34 +439,56 @@
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
+
+
+<!-- =========================================
+     LEAFLET JAVASCRIPT
+========================================= -->
+
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
 
+
+<!-- =========================================
+     MAP CUSTOM CSS
+========================================= -->
+
 <style>
 
-  #bangladesh-map {
-    background: #f8fafc;
-  }
-
-
   /* =========================================
-     DISTRICT POLYGON
+     MAP BACKGROUND
   ========================================= */
 
-  .leaflet-interactive {
+  #bangladesh-map {
 
-    transition:
-      fill-opacity 0.2s ease,
-      stroke-width 0.2s ease,
-      filter 0.2s ease;
+    background: #f8fafc;
 
   }
 
 
   /* =========================================
-     HOVER DISTRICT NAME
+     DISTRICT POLYGON TRANSITION
+  ========================================= */
+
+  #bangladesh-map .leaflet-interactive {
+
+    transition:
+
+      fill-opacity 0.2s ease,
+
+      stroke-width 0.2s ease,
+
+      filter 0.2s ease,
+
+      transform 0.2s ease;
+
+  }
+
+
+  /* =========================================
+     DISTRICT NAME ON HOVER
   ========================================= */
 
   .district-hover-label {
@@ -462,14 +505,22 @@
 
     font-weight: 700;
 
+    text-align: center;
+
     text-shadow:
-      1px 1px 3px rgba(0,0,0,0.8),
-      -1px -1px 3px rgba(0,0,0,0.8);
+
+      1px 1px 3px rgba(0, 0, 0, 0.85),
+
+      -1px -1px 3px rgba(0, 0, 0, 0.85),
+
+      0px 0px 4px rgba(0, 0, 0, 0.6);
 
     pointer-events: none;
 
   }
 
+
+  /* Remove Leaflet tooltip arrow */
 
   .district-hover-label::before {
 
@@ -479,6 +530,11 @@
 
 </style>
 
+
+
+<!-- =========================================
+     MAP JAVASCRIPT
+========================================= -->
 
 <script>
 
@@ -496,6 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollWheelZoom: false
 
   });
+
 
 
   /* =========================================
@@ -529,8 +586,9 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
 
+
   /* =========================================
-     NORMALIZE NAME
+     NORMALIZE DISTRICT NAMES
   ========================================= */
 
   function normalizeName(name) {
@@ -548,6 +606,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+
   /* =========================================
      CHECK WORKING DISTRICT
   ========================================= */
@@ -556,6 +615,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const normalizedName =
       normalizeName(name);
+
 
     return workingDistricts.some(function (district) {
 
@@ -567,14 +627,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+
   /* =========================================
-     GET DISTRICT NAME
+     GET DISTRICT NAME FROM GEOJSON
   ========================================= */
 
   function getDistrictName(feature) {
 
     const properties =
       feature.properties || {};
+
 
     return (
 
@@ -601,6 +663,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+
   /* =========================================
      DISTRICT STYLE
   ========================================= */
@@ -611,7 +674,9 @@ document.addEventListener("DOMContentLoaded", function () {
       getDistrictName(feature);
 
 
-    /* WORKING AREA */
+    /* -----------------------------------------
+       DUS WORKING AREA
+    ----------------------------------------- */
 
     if (isWorkingDistrict(districtName)) {
 
@@ -632,7 +697,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* OTHER DISTRICTS */
+    /* -----------------------------------------
+       OTHER DISTRICTS
+    ----------------------------------------- */
 
     return {
 
@@ -651,16 +718,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
+
   let districtLayer;
 
 
+
   /* =========================================
-     LOAD GEOJSON
+     LOAD BANGLADESH DISTRICT GEOJSON
   ========================================= */
 
   fetch("bangladesh_districts.geojson")
 
-    .then(function(response) {
+
+    .then(function (response) {
+
 
       if (!response.ok) {
 
@@ -670,67 +741,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
       }
 
+
       return response.json();
 
     })
 
 
-    .then(function(data) {
+    .then(function (data) {
 
 
       /* =====================================
-         GEOJSON
-      ===================================== */
+         CREATE GEOJSON LAYER
+      ====================================== */
 
       districtLayer = L.geoJSON(data, {
+
+
+        /* -----------------------------------
+           APPLY DISTRICT STYLE
+        ----------------------------------- */
 
         style: districtStyle,
 
 
-        /* ===================================
-           EACH DISTRICT
-        =================================== */
+        /* -----------------------------------
+           INTERACTION WITH EACH DISTRICT
+        ----------------------------------- */
 
-        onEachFeature: function(feature, layer) {
+        onEachFeature: function (feature, layer) {
 
 
           const districtName =
             getDistrictName(feature);
 
 
+
           /* =================================
              MOUSE OVER
           ================================= */
 
-          layer.on("mouseover", function(e) {
+          layer.on("mouseover", function (e) {
 
 
             const hoveredLayer =
               e.target;
 
 
-            /* Bring district forward */
+            /* Bring selected district forward */
 
             hoveredLayer.bringToFront();
 
 
-            /* =================================
-               SUBTLE HOVER EFFECT
-            ================================= */
+            /* --------------------------------
+               Keep thin boundary
+            -------------------------------- */
 
             hoveredLayer.setStyle({
 
-              fillOpacity: 1,
-
               weight: 0.8,
 
-              color: "#009BE2"
+              color: "#009BE2",
+
+              fillOpacity: 1
 
             });
 
 
+
             /* =================================
-               SMALL VISUAL SCALE EFFECT
+               SMALL HOVER SCALE EFFECT
             ================================= */
 
             const path =
@@ -740,7 +819,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (path) {
 
               path.style.filter =
-                "drop-shadow(0px 3px 4px rgba(0,0,0,0.25))";
+                "drop-shadow(0px 3px 5px rgba(0,0,0,0.25))";
 
               path.style.transformOrigin =
                 "center center";
@@ -749,6 +828,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "scale(1.025)";
 
             }
+
 
 
             /* =================================
@@ -777,18 +857,19 @@ document.addEventListener("DOMContentLoaded", function () {
           });
 
 
+
           /* =================================
              MOUSE OUT
           ================================= */
 
-          layer.on("mouseout", function(e) {
+          layer.on("mouseout", function (e) {
 
 
             const hoveredLayer =
               e.target;
 
 
-            /* Reset district */
+            /* Restore original style */
 
             districtLayer.resetStyle(
               hoveredLayer
@@ -803,27 +884,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (path) {
 
-              path.style.transform =
-                "";
+              path.style.transform = "";
 
-              path.style.filter =
-                "";
+              path.style.filter = "";
 
             }
 
 
-            /* Remove district name */
+            /* Hide district name */
 
             hoveredLayer.closeTooltip();
 
           });
 
 
+
           /* =================================
              CLICK
           ================================= */
 
-          layer.on("click", function() {
+          layer.on("click", function () {
+
 
             layer.bindPopup(
 
@@ -840,9 +921,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }).addTo(map);
 
 
+
       /* =====================================
-         FIT MAP
-      ===================================== */
+         AUTOMATICALLY FIT BANGLADESH
+      ====================================== */
 
       map.fitBounds(
 
@@ -860,14 +942,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================
-       ERROR
+       ERROR HANDLING
     ========================================= */
 
-    .catch(function(error) {
+    .catch(function (error) {
+
 
       console.error(
+
         "Bangladesh map error:",
+
         error
+
       );
 
 
