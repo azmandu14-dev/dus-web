@@ -1,683 +1,1484 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
+
   <title>Dwip Unnayan Songstha</title>
+
+  <!-- =========================================
+       TAILWIND CSS
+  ========================================== -->
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <!-- =========================================
+       FONT AWESOME
+  ========================================== -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
+
+  <!-- =========================================
+       LEAFLET CSS
+  ========================================== -->
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+
+  <!-- =========================================
+       SWIPER CSS
+  ========================================== -->
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/swiper/swiper-bundle.min.css"
+  >
+
+  <!-- =========================================
+       GLOBAL / NAVBAR / MAP CSS
+  ========================================== -->
+
+  <style>
+
+    /* =========================================
+       NAVBAR
+       ALWAYS ABOVE MAP
+    ========================================= */
+
+    header {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 99999 !important;
+    }
+
+    header nav {
+      position: relative;
+      z-index: 99999 !important;
+    }
+
+
+    /* =========================================
+       ANNOUNCEMENT BAR
+    ========================================= */
+
+    #announcement-bar {
+
+      position: absolute;
+
+      top: -50px;
+
+      left: 0;
+
+      width: 100%;
+
+      background-color: #f59e0b;
+
+      color: white;
+
+      text-align: center;
+
+      padding: 10px;
+
+      font-weight: bold;
+
+      z-index: 9990;
+
+      transition:
+        top 0.5s ease-in-out;
+
+    }
+
+
+    /* =========================================
+       MAP
+       ALWAYS BELOW NAVBAR
+    ========================================= */
+
+    #bangladesh-map {
+
+      position: relative !important;
+
+      z-index: 1 !important;
+
+      background: #f8fafc;
+
+    }
+
+
+    /* Force all Leaflet panes below navbar */
+
+    #bangladesh-map .leaflet-map-pane {
+
+      z-index: 1 !important;
+
+    }
+
+    #bangladesh-map .leaflet-tile-pane {
+
+      z-index: 1 !important;
+
+    }
+
+    #bangladesh-map .leaflet-overlay-pane {
+
+      z-index: 2 !important;
+
+    }
+
+    #bangladesh-map .leaflet-shadow-pane {
+
+      z-index: 3 !important;
+
+    }
+
+    #bangladesh-map .leaflet-marker-pane {
+
+      z-index: 4 !important;
+
+    }
+
+    #bangladesh-map .leaflet-tooltip-pane {
+
+      z-index: 5 !important;
+
+    }
+
+    #bangladesh-map .leaflet-popup-pane {
+
+      z-index: 6 !important;
+
+    }
+
+    #bangladesh-map .leaflet-control-container {
+
+      z-index: 7 !important;
+
+    }
+
+
+    /* =========================================
+       DISTRICT HOVER LABEL
+    ========================================== */
+
+    .district-hover-label {
+
+      background: transparent !important;
+
+      border: none !important;
+
+      box-shadow: none !important;
+
+      color: #ffffff !important;
+
+      font-size: 14px;
+
+      font-weight: 700;
+
+      text-align: center;
+
+      white-space: nowrap;
+
+      text-shadow:
+        1px 1px 3px rgba(0,0,0,0.9),
+        -1px -1px 3px rgba(0,0,0,0.9),
+        0px 0px 5px rgba(0,0,0,0.7);
+
+      pointer-events: none;
+
+    }
+
+
+    .district-hover-label::before {
+
+      display: none !important;
+
+    }
+
+
+    /* =========================================
+       MAP SMOOTH HOVER
+    ========================================== */
+
+    #bangladesh-map .leaflet-interactive {
+
+      transition:
+        fill-opacity 0.2s ease,
+        filter 0.2s ease;
+
+    }
+
+
+    /* =========================================
+       SWIPER
+    ========================================== */
+
+    .swiper {
+
+      width: 100%;
+
+      height: 100%;
+
+    }
+
+
+    .swiper-button-next,
+    .swiper-button-prev,
+    .swiper-pagination {
+
+      z-index: 30;
+
+    }
+
+
+    /* =========================================
+       GREEN HALFTONE OVERLAY
+    ========================================== */
+
+    .halftone-overlay {
+
+      background-image:
+
+        radial-gradient(
+          circle,
+          rgba(0, 147, 70, 0.5) 1px,
+          transparent 1px
+        ),
+
+        linear-gradient(
+          to top,
+          rgba(0, 147, 70, 0.6),
+          transparent
+        );
+
+      background-size:
+        6px 6px,
+        100% 100%;
+
+      mix-blend-mode: multiply;
+
+      opacity: 0.8;
+
+    }
+
+  </style>
+
 </head>
+
 <body class="bg-gray-50 font-sans">
-  <!-- Header -->
-  <header class="shadow-lg sticky top-0 z-50 w-full">
-  <nav class="bg-[#009BE2] w-full px-6 lg:px-12 py-4">
-  <div class="flex justify-between items-center">
 
-    <!-- Logo -->
-    <div class="flex items-center space-x-3">
-      <div class="bg-white p-2 rounded">
-        <img src="image/dus.png" alt="dus_logo" class="h-10 w-auto">
-      </div>
-      <div class="text-lg md:text-2xl font-bold text-white">
-        Dwip Unnayan Songstha
-      </div>
+<!-- =========================================
+     HEADER / NAVBAR
+========================================= -->
+
+<header class="shadow-lg sticky top-0 z-[99999] w-full">
+
+  <nav
+    class="bg-[#009BE2] w-full px-6 lg:px-12 py-4"
+  >
+
+```
+<div class="flex justify-between items-center">
+
+
+  <!-- =====================================
+       LOGO
+  ====================================== -->
+
+  <div class="flex items-center space-x-3">
+
+    <div class="bg-white p-2 rounded">
+
+      <img
+        src="image/dus.png"
+        alt="DUS Logo"
+        class="h-10 w-auto"
+      >
+
     </div>
 
-    <!-- Desktop Menu -->
-    <div class="hidden md:flex items-center space-x-6">
-      <ul class="flex space-x-6 text-white">
-        <li><a href="#about" class="hover:text-yellow-300">About Us</a></li>
-        <li class="relative group">
-    <a href="#" class="hover:text-yellow-300 flex items-center">
-        Our Initiatives
-        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7"/>
-        </svg>
-    </a>
+    <div
+      class="text-lg md:text-2xl font-bold text-white"
+    >
 
-    <!-- Dropdown -->
-    <ul class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg hidden group-hover:block z-50">
-        <li>
-            <a href="ongoing-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
-                Ongoing Programs
-            </a>
-        </li>
-        <li>
-            <a href="previous-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-b-lg">
-                Previous Programs
-            </a>
-        </li>
-        <li>
-            <a href="ongoing-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
-                Disaster Response
-            </a>
-        </li>
-        <li>
-            <a href="ongoing-programs.html"
-               class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg">
-                Social Enterprise
-            </a>
-        </li>
-    </ul>
-</li>
-        <li><a href="#about" class="hover:text-yellow-300">Resources</a></li>
-        <li><a href="#programs" class="hover:text-yellow-300">Engagement</a></li>
-        
-      </ul>
+      Dwip Unnayan Songstha
 
-      <a href="#" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200">
-        Donate
-      </a>
     </div>
-
-    <!-- Hamburger Button -->
-    <button id="menu-btn" class="md:hidden text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-        viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
 
   </div>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden mt-4">
-    <ul class="flex flex-col space-y-4 text-white">
-      <li><a href="#about" class="block hover:text-yellow-300">About</a></li>
-      <li><a href="#about" class="block hover:text-yellow-300">What we do</a></li>
-      <li><a href="#about" class="block hover:text-yellow-300">Projects</a></li>
-      <li><a href="#programs" class="block hover:text-yellow-300">Programs</a></li>
+
+  <!-- =====================================
+       DESKTOP MENU
+  ====================================== -->
+
+  <div
+    class="hidden md:flex items-center space-x-6"
+  >
+
+    <ul
+      class="flex space-x-6 text-white"
+    >
+
+      <li>
+
+        <a
+          href="#about"
+          class="hover:text-yellow-300"
+        >
+
+          About Us
+
+        </a>
+
+      </li>
+
+
+      <!-- Our Initiatives -->
+
+      <li class="relative group">
+
+        <a
+          href="#"
+          class="hover:text-yellow-300 flex items-center"
+        >
+
+          Our Initiatives
+
+          <svg
+            class="w-4 h-4 ml-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+
+          </svg>
+
+        </a>
+
+
+        <!-- Dropdown -->
+
+        <ul
+          class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg hidden group-hover:block z-[999999]"
+        >
+
+          <li>
+
+            <a
+              href="ongoing-programs.html"
+              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg"
+            >
+
+              Ongoing Programs
+
+            </a>
+
+          </li>
+
+
+          <li>
+
+            <a
+              href="previous-programs.html"
+              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white"
+            >
+
+              Previous Programs
+
+            </a>
+
+          </li>
+
+
+          <li>
+
+            <a
+              href="ongoing-programs.html"
+              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white"
+            >
+
+              Disaster Response
+
+            </a>
+
+          </li>
+
+
+          <li>
+
+            <a
+              href="ongoing-programs.html"
+              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-b-lg"
+            >
+
+              Social Enterprise
+
+            </a>
+
+          </li>
+
+        </ul>
+
+      </li>
+
+
+      <li>
+
+        <a
+          href="#about"
+          class="hover:text-yellow-300"
+        >
+
+          Resources
+
+        </a>
+
+      </li>
+
+
+      <li>
+
+        <a
+          href="#programs"
+          class="hover:text-yellow-300"
+        >
+
+          Engagement
+
+        </a>
+
+      </li>
+
     </ul>
 
-    <a href="#"
-      class="mt-4 inline-block bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200">
+
+    <!-- Donate -->
+
+    <a
+      href="#"
+      class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200"
+    >
+
       Donate
+
     </a>
+
   </div>
-</nav>
 
 
-  </header>
-<style>
-   nav {
-    position: relative;
-    z-index: 10; /* Higher z-index to stay above the announcement bar */
-  }
-</style>
+  <!-- =====================================
+       HAMBURGER
+  ====================================== -->
 
- <!-- Script for Announcement Bar Behavior -->
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const announcementBar = document.getElementById('announcement-bar');
+  <button
+    id="menu-btn"
+    class="md:hidden text-white"
+  >
 
-      // Slide down the bar after a short delay
-      setTimeout(() => {
-        announcementBar.style.top = '5.3rem'; // Position it behind the navbar
-      }, 1000); // Delay by 1 second
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-8 w-8"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
 
-      // Hide the announcement bar after 8 seconds
-      setTimeout(() => {
-        announcementBar.style.top = '-50px'; // Hide it again
-      }, 9000); // 1-second delay + 8 seconds display
-    });
-  </script>
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"
+      />
 
+    </svg>
 
-<style>
-  #announcement-bar {
-    position: absolute;
-    top: -50px; /* Initially hidden */
-    left: 0;
-    width: 100%;
-    background-color: #f59e0b;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
-    z-index: 9;
-    transition: top 0.5s ease-in-out;
-  }
-</style>
+  </button>
 
-</head>
-<body class="bg-gray-50 font-sans">
-  
+</div>
 
 
-<!-- Casousel part start -->
+<!-- =====================================
+     MOBILE MENU
+====================================== -->
 
-<section class="relative py-0">
-  <div class="container mx-auto relative">
-    <div class="swiper mySwiper relative">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="image/image_c1.JPG" class="w-full h-[600px] object-cover" alt="Slide 1">
-        </div>
-        <div class="swiper-slide">
-          <img src="image/image_c2.JPG" class="w-full h-[600px] object-cover" alt="Slide 2">
-        </div>
-        <div class="swiper-slide">
-          <img src="image/image_c3.JPG" class="w-full h-[600px] object-cover" alt="Slide 3">
-        </div>
-      </div>
+<div
+  id="mobile-menu"
+  class="hidden md:hidden mt-4"
+>
 
-      <!-- Pagination and Navigation -->
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
+  <ul
+    class="flex flex-col space-y-4 text-white"
+  >
 
-      <!-- Green halftone overlay on top -->
-      <div class="absolute bottom-0 left-0 w-full h-48 pointer-events-none halftone-overlay z-20"></div>
-    </div>
-  </div>
-</section>
+    <li>
 
-<!-- Swiper CSS and JS -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+      <a
+        href="#about"
+        class="block hover:text-yellow-300"
+      >
 
-<style>
-  /* Green halftone overlay effect */
-  .halftone-overlay {
-    background-image:
-      radial-gradient(circle, rgba(0, 147, 70, 0.5) 1px, transparent 1px), /* Green dots */
-      linear-gradient(to top, rgba(0, 147, 70, 0.6), transparent); /* Soft green fade upward */
-    background-size: 6px 6px, 100% 100%;
-    mix-blend-mode: multiply;
-    opacity: 0.8;
-  }
+        About
 
-  .swiper {
-    width: 100%;
-    height: 100%;
-  }
+      </a>
 
-  /* Keep navigation visible above overlay */
-  .swiper-button-next,
-  .swiper-button-prev,
-  .swiper-pagination {
-    z-index: 30;
-  }
-</style>
+    </li>
+
+
+    <li>
+
+      <a
+        href="#about"
+        class="block hover:text-yellow-300"
+      >
+
+        What we do
+
+      </a>
+
+    </li>
+
+
+    <li>
+
+      <a
+        href="#about"
+        class="block hover:text-yellow-300"
+      >
+
+        Projects
+
+      </a>
+
+    </li>
+
+
+    <li>
+
+      <a
+        href="#programs"
+        class="block hover:text-yellow-300"
+      >
+
+        Programs
+
+      </a>
+
+    </li>
+
+  </ul>
+
+
+  <a
+    href="#"
+    class="mt-4 inline-block bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200"
+  >
+
+    Donate
+
+  </a>
+
+</div>
+```
+
+  </nav>
+
+</header>
+
+<!-- =========================================
+     ANNOUNCEMENT BAR
+========================================= -->
+
+<div id="announcement-bar">
+
+Welcome to Dwip Unnayan Songstha
+
+</div>
+
+<!-- =========================================
+     ANNOUNCEMENT BAR SCRIPT
+========================================= -->
 
 <script>
-  const swiper = new Swiper('.mySwiper', {
-    loop: true,
-    effect: 'slide',
-    speed: 1200,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+
+  window.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+      const announcementBar =
+        document.getElementById(
+          'announcement-bar'
+        );
+
+
+      if (!announcementBar) return;
+
+
+      setTimeout(() => {
+
+        announcementBar.style.top =
+          '5.3rem';
+
+      }, 1000);
+
+
+      setTimeout(() => {
+
+        announcementBar.style.top =
+          '-50px';
+
+      }, 9000);
+
+    }
+
+  );
+
 </script>
 
-  <!-- Carousel Section End -->
- 
+<!-- =========================================
+     CAROUSEL
+========================================= -->
 
-  <!-- About Section -->
-  <section id="about" class="py-16 bg--100">
-    <div class="container mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-8">About Us</h2>
-      <p class="text-lg text-green-700 text-center max-w-3xl mx-auto">A Community based philanthropic and development organization emergence/dedicated to sustainable poverty reduction, entrepreneur’s promotion and capacity building of the underprivileged directing towards a just society. Interventions, DUS strives to bring about positive change in the quality of life of the poor community of rural Bangladesh..</p>
-    </div>
-  </section>
+<section class="relative py-0">
 
-  <!-- Programs Section -->
-  <section id="programs" class="py-16 bg-gray-50">
-  <div class="container mx-auto px-4">
-    <h2 class="text-4xl font-bold text-center mb-10">Our Programs</h2>
+  <div
+    class="container mx-auto relative"
+  >
 
-    <div class="grid md:grid-cols-3 gap-8">
+```
+<div
+  class="swiper mySwiper relative"
+>
 
-      <!-- Education -->
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
-        <img src="image/image_c2.JPG"
-             alt="Education Program"
-             class="w-full h-56 object-cover">
-        <div class="p-6 text-center">
-          <h3 class="text-2xl font-bold mb-3">Micro-finance</h3>
-          <p class="text-gray-600">
-            Micro finance Program is the core program of all DUS activities. DUS has been implementing its major program in partnership with Palli Karma Sahayak Foundation (PKSF) since 2000. 
-          </p>
-        </div>
-      </div>
+  <div class="swiper-wrapper">
 
-      <!-- Healthcare -->
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
-        <img src="image/phc.JPG"
-             alt="Healthcare Program"
-             class="w-full h-56 object-cover">
-        <div class="p-6 text-center">
-          <h3 class="text-2xl font-bold mb-3">Healthcare</h3>
-          <p class="text-gray-600">
-            Ensuring children receive essential healthcare services.
-          </p>
-        </div>
-      </div>
 
-      <!-- Child Protection -->
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
-        <img src="image/wash.JPG"
-             alt="Child Protection Program"
-             class="w-full h-56 object-cover">
-        <div class="p-6 text-center">
-          <h3 class="text-2xl font-bold mb-3">WASH</h3>
-          <p class="text-gray-600">
-            Creating safe environments for children to grow and thrive.
-          </p>
-        </div>
-      </div>
+    <div class="swiper-slide">
+
+      <img
+        src="image/image_c1.JPG"
+        class="w-full h-[600px] object-cover"
+        alt="Slide 1"
+      >
 
     </div>
-  </div>
-</section>
 
-<section id="programs" class="py-16 bg-gray-50">
-  <div class="container mx-auto px-4">
-    <h2 class="text-4xl font-bold text-center mb-10">Our Programs</h2>
 
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="swiper-slide">
 
-      <!-- Education -->
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
-        <img src="image/image_c2.JPG"
-             alt="Education Program"
-             class="w-full h-56 object-cover">
-        <div class="p-6 text-center">
-          <h3 class="text-2xl font-bold mb-3">Micro-finance</h3>
-          <p class="text-gray-600">
-            Micro finance Program is the core program of all DUS activities. DUS has been implementing its major program in partnership with Palli Karma Sahayak Foundation (PKSF) since 2000. 
-          </p>
-        </div>
-      </div>
-
-      <!-- Healthcare -->
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
-        <img src="image/phc.JPG"
-             alt="Healthcare Program"
-             class="w-full h-56 object-cover">
-        <div class="p-6 text-center">
-          <h3 class="text-2xl font-bold mb-3">Healthcare</h3>
-          <p class="text-gray-600">
-            Ensuring children receive essential healthcare services.
-          </p>
-        </div>
-      </div>
-
-      <!-- Child Protection -->
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300">
-        <img src="image/wash.JPG"
-             alt="Child Protection Program"
-             class="w-full h-56 object-cover">
-        <div class="p-6 text-center">
-          <h3 class="text-2xl font-bold mb-3">WASH</h3>
-          <p class="text-gray-600">
-            Creating safe environments for children to grow and thrive.
-          </p>
-        </div>
-      </div>
+      <img
+        src="image/image_c2.JPG"
+        class="w-full h-[600px] object-cover"
+        alt="Slide 2"
+      >
 
     </div>
+
+
+    <div class="swiper-slide">
+
+      <img
+        src="image/image_c3.JPG"
+        class="w-full h-[600px] object-cover"
+        alt="Slide 3"
+      >
+
+    </div>
+
   </div>
+
+
+  <!-- Pagination -->
+
+  <div class="swiper-pagination"></div>
+
+
+  <!-- Navigation -->
+
+  <div class="swiper-button-next"></div>
+
+  <div class="swiper-button-prev"></div>
+
+
+  <!-- Halftone -->
+
+  <div
+    class="absolute bottom-0 left-0 w-full h-48 pointer-events-none halftone-overlay z-20"
+  ></div>
+
+</div>
+```
+
+  </div>
+
 </section>
 
-  <!-- Call to Action Section -->
-<section id="donate" class="py-16 bg-[#009BE2] text-white">
-  <div class="container mx-auto px-4 text-center">
-    <h2 class="text-4xl font-bold mb-6">Make a Difference Today</h2>
-    <p class="text-lg mb-6">
-      Your support helps us provide essential services to children in need around the world.
-    </p>
-    <a href="#" class="bg-white text-[#0c4f9d] px-6 py-3 rounded-lg font-medium hover:bg-gray-200">
-      Donate Now
-    </a>
+<!-- =========================================
+     SWIPER JS
+========================================= -->
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+
+  const swiper =
+    new Swiper(
+      '.mySwiper',
+      {
+
+        loop: true,
+
+        effect: 'slide',
+
+        speed: 1200,
+
+        autoplay: {
+
+          delay: 3000,
+
+          disableOnInteraction: false
+
+        },
+
+        pagination: {
+
+          el: '.swiper-pagination',
+
+          clickable: true
+
+        },
+
+        navigation: {
+
+          nextEl: '.swiper-button-next',
+
+          prevEl: '.swiper-button-prev'
+
+        }
+
+      }
+
+    );
+
+</script>
+
+<!-- =========================================
+     ABOUT SECTION
+========================================= -->
+
+<section
+  id="about"
+  class="py-16 bg-white"
+>
+
+  <div
+    class="container mx-auto px-4"
+  >
+
+```
+<h2
+  class="text-4xl font-bold text-center mb-8"
+>
+
+  About Us
+
+</h2>
+
+
+<p
+  class="text-lg text-green-700 text-center max-w-3xl mx-auto"
+>
+
+  A Community based philanthropic and development
+  organization emergence/dedicated to sustainable
+  poverty reduction, entrepreneur’s promotion and
+  capacity building of the underprivileged directing
+  towards a just society. Interventions, DUS strives
+  to bring about positive change in the quality of
+  life of the poor community of rural Bangladesh.
+
+</p>
+```
+
   </div>
+
 </section>
 
+<!-- =========================================
+     PROGRAMS SECTION
+========================================= -->
+
+<section
+  id="programs"
+  class="py-16 bg-gray-50"
+>
+
+  <div
+    class="container mx-auto px-4"
+  >
+
+```
+<h2
+  class="text-4xl font-bold text-center mb-10"
+>
+
+  Our Programs
+
+</h2>
+
+
+<div
+  class="grid md:grid-cols-3 gap-8"
+>
+
+
+  <!-- Micro-finance -->
+
+  <div
+    class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300"
+  >
+
+    <img
+      src="image/image_c2.JPG"
+      alt="Micro-finance Program"
+      class="w-full h-56 object-cover"
+    >
+
+
+    <div class="p-6 text-center">
+
+      <h3
+        class="text-2xl font-bold mb-3"
+      >
+
+        Micro-finance
+
+      </h3>
+
+
+      <p class="text-gray-600">
+
+        Micro finance Program is the core program
+        of all DUS activities. DUS has been
+        implementing its major program in
+        partnership with Palli Karma Sahayak
+        Foundation (PKSF) since 2000.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- Healthcare -->
+
+  <div
+    class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300"
+  >
+
+    <img
+      src="image/phc.JPG"
+      alt="Healthcare Program"
+      class="w-full h-56 object-cover"
+    >
+
+
+    <div class="p-6 text-center">
+
+      <h3
+        class="text-2xl font-bold mb-3"
+      >
+
+        Healthcare
+
+      </h3>
+
+
+      <p class="text-gray-600">
+
+        Ensuring children receive essential
+        healthcare services.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- WASH -->
+
+  <div
+    class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300"
+  >
+
+    <img
+      src="image/wash.JPG"
+      alt="WASH Program"
+      class="w-full h-56 object-cover"
+    >
+
+
+    <div class="p-6 text-center">
+
+      <h3
+        class="text-2xl font-bold mb-3"
+      >
+
+        WASH
+
+      </h3>
+
+
+      <p class="text-gray-600">
+
+        Creating safe environments for children
+        to grow and thrive.
+
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+</section>
+
+<!-- =========================================
+     SECOND PROGRAMS SECTION
+========================================= -->
+
+<section
+  class="py-16 bg-gray-50"
+>
+
+  <div
+    class="container mx-auto px-4"
+  >
+
+```
+<h2
+  class="text-4xl font-bold text-center mb-10"
+>
+
+  Our Programs
+
+</h2>
+
+
+<div
+  class="grid md:grid-cols-3 gap-8"
+>
+
+
+  <!-- Micro-finance -->
+
+  <div
+    class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300"
+  >
+
+    <img
+      src="image/image_c2.JPG"
+      alt="Micro-finance Program"
+      class="w-full h-56 object-cover"
+    >
+
+
+    <div class="p-6 text-center">
+
+      <h3
+        class="text-2xl font-bold mb-3"
+      >
+
+        Micro-finance
+
+      </h3>
+
+
+      <p class="text-gray-600">
+
+        Micro finance Program is the core program
+        of all DUS activities. DUS has been
+        implementing its major program in
+        partnership with Palli Karma Sahayak
+        Foundation (PKSF) since 2000.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- Healthcare -->
+
+  <div
+    class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300"
+  >
+
+    <img
+      src="image/phc.JPG"
+      alt="Healthcare Program"
+      class="w-full h-56 object-cover"
+    >
+
+
+    <div class="p-6 text-center">
+
+      <h3
+        class="text-2xl font-bold mb-3"
+      >
+
+        Healthcare
+
+      </h3>
+
+
+      <p class="text-gray-600">
+
+        Ensuring children receive essential
+        healthcare services.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- WASH -->
+
+  <div
+    class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300"
+  >
+
+    <img
+      src="image/wash.JPG"
+      alt="WASH Program"
+      class="w-full h-56 object-cover"
+    >
+
+
+    <div class="p-6 text-center">
+
+      <h3
+        class="text-2xl font-bold mb-3"
+      >
+
+        WASH
+
+      </h3>
+
+
+      <p class="text-gray-600">
+
+        Creating safe environments for children
+        to grow and thrive.
+
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+</section>
+
+<!-- =========================================
+     CALL TO ACTION
+========================================= -->
+
+<section
+  id="donate"
+  class="py-16 bg-[#009BE2] text-white"
+>
+
+  <div
+    class="container mx-auto px-4 text-center"
+  >
+
+```
+<h2
+  class="text-4xl font-bold mb-6"
+>
+
+  Make a Difference Today
+
+</h2>
+
+
+<p class="text-lg mb-6">
+
+  Your support helps us provide essential
+  services to children in need around the world.
+
+</p>
+
+
+<a
+  href="#"
+  class="bg-white text-[#0c4f9d] px-6 py-3 rounded-lg font-medium hover:bg-gray-200"
+>
+
+  Donate Now
+
+</a>
+```
+
+  </div>
+
+</section>
 
 <!-- =========================================
      DUS WORKING AREA MAP
 ========================================= -->
 
-<section id="working-area-map" class="py-16 bg-white">
+<section
+  id="working-area-map"
+  class="py-16 bg-white"
+>
 
-  <div class="container mx-auto px-4">
+  <div
+    class="container mx-auto px-4"
+  >
 
-    <!-- Section Heading -->
-    <div class="text-center mb-10">
+```
+<!-- Section Heading -->
 
-      <h2 class="text-4xl font-bold text-gray-800 mb-3">
-        Our Working Areas
-      </h2>
+<div
+  class="text-center mb-10"
+>
 
-      <p class="text-gray-600 max-w-2xl mx-auto">
-        DUS is working across selected districts of Bangladesh
-        to support vulnerable and underserved communities.
-      </p>
+  <h2
+    class="text-4xl font-bold text-gray-800 mb-3"
+  >
 
-    </div>
+    Our Working Areas
 
-
-    <!-- Map -->
-    <div
-      id="bangladesh-map"
-      class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-    </div>
-
-
-    <!-- Legend -->
-    <div class="flex flex-wrap justify-center gap-6 mt-6 text-sm">
-
-      <div class="flex items-center">
-
-        <span
-          class="w-5 h-5 rounded-sm mr-2"
-          style="background:#009BE2;">
-        </span>
-
-        <span class="text-gray-700">
-          DUS Working Areas
-        </span>
-
-      </div>
+  </h2>
 
 
-      <div class="flex items-center">
+  <p
+    class="text-gray-600 max-w-2xl mx-auto"
+  >
 
-        <span
-          class="w-5 h-5 rounded-sm mr-2 bg-white border border-[#009BE2]">
-        </span>
+    DUS is working across selected districts
+    of Bangladesh to support vulnerable and
+    underserved communities.
 
-        <span class="text-gray-700">
-          Other Districts
-        </span>
+  </p>
 
-      </div>
+</div>
 
-    </div>
+
+<!-- Map -->
+
+<div
+  id="bangladesh-map"
+  class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+></div>
+
+
+<!-- Legend -->
+
+<div
+  class="flex flex-wrap justify-center gap-6 mt-6 text-sm"
+>
+
+
+  <div class="flex items-center">
+
+    <span
+      class="w-5 h-5 rounded-sm mr-2"
+      style="background:#009BE2;"
+    ></span>
+
+
+    <span class="text-gray-700">
+
+      DUS Working Areas
+
+    </span>
+
+  </div>
+
+
+  <div class="flex items-center">
+
+    <span
+      class="w-5 h-5 rounded-sm mr-2 bg-white border border-[#009BE2]"
+    ></span>
+
+
+    <span class="text-gray-700">
+
+      Other Districts
+
+    </span>
+
+  </div>
+
+</div>
+```
 
   </div>
 
 </section>
 
-
 <!-- =========================================
-     LEAFLET
+     LEAFLET JS
 ========================================= -->
 
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
 <script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
 
-
-<style>
-
-  /* =========================================
-     MAP BACKGROUND
-  ========================================= */
-
-  #bangladesh-map {
-    background: #f8fafc;
-  }
-
-
-  /* =========================================
-     DISTRICT NAME ON HOVER
-  ========================================= */
-
-  .district-hover-label {
-
-    background: transparent !important;
-
-    border: none !important;
-
-    box-shadow: none !important;
-
-    color: #ffffff !important;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    text-align: center;
-
-    white-space: nowrap;
-
-    text-shadow:
-      1px 1px 3px rgba(0,0,0,0.9),
-      -1px -1px 3px rgba(0,0,0,0.9),
-      0px 0px 5px rgba(0,0,0,0.7);
-
-    pointer-events: none;
-
-  }
-
-
-  .district-hover-label::before {
-    display: none !important;
-  }
-
-
-  /* Smooth hover */
-
-  #bangladesh-map .leaflet-interactive {
-    transition:
-      fill-opacity 0.2s ease,
-      filter 0.2s ease;
-  }
-
-</style>
-
+<!-- =========================================
+     MAP SCRIPT
+========================================= -->
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
 
 
-  /* =========================================
-     CREATE MAP
-  ========================================= */
+    /* =========================================
+       CREATE MAP
+    ========================================= */
 
-  const map = L.map("bangladesh-map", {
+    const map =
+      L.map(
+        "bangladesh-map",
+        {
 
-    zoomControl: true,
+          zoomControl: true,
 
-    scrollWheelZoom: false
+          scrollWheelZoom: false
 
-  });
-
-
-  /* =========================================
-     ONLY THESE 9 DISTRICTS ARE BLUE
-  ========================================= */
-
-  const workingDistricts = [
-
-    "dhaka",
-
-    "noakhali",
-
-    "lakshmipur",
-
-    "laxmipur",
-
-    "cumilla",
-
-    "comilla",
-
-    "feni",
-
-    "chandpur",
-
-    "chattogram",
-
-    "chittagong",
-
-    "coxsbazar",
-
-    "cox'sbazar",
-
-    "cox's bazar",
-
-    "bhola"
-
-  ];
+        }
+      );
 
 
-  /* =========================================
-     NORMALIZE DISTRICT NAME
-  ========================================= */
+    /* =========================================
+       WORKING DISTRICTS
+    ========================================= */
 
-  function normalizeName(name) {
+    const workingDistricts = [
 
-    return String(name || "")
+      "dhaka",
 
-      .toLowerCase()
+      "noakhali",
 
-      .trim()
+      "lakshmipur",
 
-      .replace(/['’`]/g, "")
+      "laxmipur",
 
-      .replace(/[-_]/g, "")
+      "cumilla",
 
-      .replace(/\s+/g, "");
+      "comilla",
 
-  }
+      "feni",
 
+      "chandpur",
 
-  /* =========================================
-     CHECK EXACT DISTRICT
-  ========================================= */
+      "chattogram",
 
-  function isWorkingDistrict(name) {
+      "chittagong",
 
-    const normalized =
-      normalizeName(name);
+      "coxsbazar",
 
+      "cox'sbazar",
 
-    return workingDistricts.includes(
-      normalized
-    );
+      "cox's bazar",
 
-  }
-
-
-  /* =========================================
-     GET DISTRICT NAME
-  ========================================= */
-
-  function getDistrictName(feature) {
-
-    const p =
-      feature.properties || {};
-
-
-    /*
-      Check common GeoJSON district fields
-    */
-
-    const possibleNames = [
-
-      "NAME_2",
-      "name_2",
-
-      "DISTRICT",
-      "District",
-      "district",
-
-      "NAME",
-      "Name",
-      "name",
-
-      "ADM2_EN",
-      "ADM2_NAME",
-
-      "DISTRICT_NAME",
-      "District_Name",
-      "district_name",
-
-      "shapeName",
-      "ShapeName"
+      "bhola"
 
     ];
 
 
-    for (let i = 0;
-         i < possibleNames.length;
-         i++) {
+    /* =========================================
+       NORMALIZE NAME
+    ========================================= */
 
-      const key =
-        possibleNames[i];
+    function normalizeName(name) {
 
+      return String(name || "")
 
-      if (
+        .toLowerCase()
 
-        p[key] !== undefined &&
+        .trim()
 
-        p[key] !== null &&
+        .replace(/['’`]/g, "")
 
-        String(p[key]).trim() !== ""
+        .replace(/[-_]/g, "")
 
-      ) {
-
-        return String(p[key]).trim();
-
-      }
+        .replace(/\s+/g, "");
 
     }
 
 
-    return "District";
+    /* =========================================
+       CHECK WORKING DISTRICT
+    ========================================= */
 
-  }
+    function isWorkingDistrict(name) {
 
-
-  /* =========================================
-     DISTRICT STYLE
-  ========================================= */
-
-  function districtStyle(feature) {
-
-    const districtName =
-      getDistrictName(feature);
+      const normalized =
+        normalizeName(name);
 
 
-    /*
-      ONLY THE SPECIFIED DISTRICTS
-      ARE BLUE.
-    */
+      return workingDistricts.includes(
+        normalized
+      );
 
-    if (
-      isWorkingDistrict(districtName)
-    ) {
+    }
+
+
+    /* =========================================
+       GET DISTRICT NAME
+    ========================================= */
+
+    function getDistrictName(feature) {
+
+      const p =
+        feature.properties || {};
+
+
+      const possibleNames = [
+
+        "NAME_2",
+
+        "name_2",
+
+        "DISTRICT",
+
+        "District",
+
+        "district",
+
+        "NAME",
+
+        "Name",
+
+        "name",
+
+        "ADM2_EN",
+
+        "ADM2_NAME",
+
+        "DISTRICT_NAME",
+
+        "District_Name",
+
+        "district_name",
+
+        "shapeName",
+
+        "ShapeName"
+
+      ];
+
+
+      for (
+        let i = 0;
+        i < possibleNames.length;
+        i++
+      ) {
+
+        const key =
+          possibleNames[i];
+
+
+        if (
+
+          p[key] !== undefined &&
+
+          p[key] !== null &&
+
+          String(p[key]).trim() !== ""
+
+        ) {
+
+          return String(p[key]).trim();
+
+        }
+
+      }
+
+
+      return "District";
+
+    }
+
+
+    /* =========================================
+       DISTRICT STYLE
+    ========================================= */
+
+    function districtStyle(feature) {
+
+      const districtName =
+        getDistrictName(feature);
+
+
+      if (
+        isWorkingDistrict(districtName)
+      ) {
+
+        return {
+
+          fillColor: "#009BE2",
+
+          fillOpacity: 0.95,
+
+          color: "#006FA6",
+
+          weight: 0.8,
+
+          opacity: 1
+
+        };
+
+      }
+
 
       return {
 
-        fillColor: "#009BE2",
+        fillColor: "#ffffff",
 
-        fillOpacity: 0.95,
+        fillOpacity: 1,
 
-        color: "#006FA6",
+        color: "#009BE2",
 
         weight: 0.8,
 
@@ -688,274 +1489,257 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /*
-      EVERY OTHER DISTRICT
-      REMAINS WHITE.
-    */
-
-    return {
-
-      fillColor: "#ffffff",
-
-      fillOpacity: 1,
-
-      color: "#009BE2",
-
-      weight: 0.8,
-
-      opacity: 1
-
-    };
-
-  }
-
-
-  let districtLayer;
-
-
-  /* =========================================
-     LOAD GEOJSON
-  ========================================= */
-
-  fetch("bangladesh_districts.geojson")
-
-
-    .then(function(response) {
-
-      if (!response.ok) {
-
-        throw new Error(
-          "GeoJSON file could not be loaded."
-        );
-
-      }
-
-      return response.json();
-
-    })
-
-
-    .then(function(data) {
-
-
-      /* =====================================
-         CREATE DISTRICT LAYER
-      ====================================== */
-
-      districtLayer = L.geoJSON(data, {
-
-        style: districtStyle,
-
-
-        /* ===================================
-           DISTRICT INTERACTION
-        =================================== */
-
-        onEachFeature: function(
-          feature,
-          layer
-        ) {
-
-
-          const districtName =
-            getDistrictName(feature);
-
-
-          /* =================================
-             HOVER
-          ================================= */
-
-          layer.on(
-            "mouseover",
-            function(e) {
-
-
-              const selectedLayer =
-                e.target;
-
-
-              /*
-                Bring hovered district
-                above neighbouring districts.
-              */
-
-              selectedLayer.bringToFront();
-
-
-              /*
-                Keep boundary thin.
-              */
-
-              selectedLayer.setStyle({
-
-                weight: 0.8,
-
-                color: "#006FA6",
-
-                fillOpacity: 1
-
-              });
-
-
-              /*
-                Small visual enlargement.
-              */
-
-              if (
-                selectedLayer._path
-              ) {
-
-                selectedLayer._path.style.filter =
-                  "drop-shadow(0px 3px 5px rgba(0,0,0,0.35))";
-
-              }
-
-
-              /*
-                Show district name.
-              */
-
-              selectedLayer.bindTooltip(
-
-                districtName,
-
-                {
-
-                  permanent: true,
-
-                  direction: "center",
-
-                  className:
-                    "district-hover-label",
-
-                  opacity: 1
-
-                }
-
-              );
-
-
-              selectedLayer.openTooltip();
-
-            }
-          );
-
-
-          /* =================================
-             MOUSE OUT
-          ================================= */
-
-          layer.on(
-            "mouseout",
-            function(e) {
-
-
-              const selectedLayer =
-                e.target;
-
-
-              /*
-                Restore original
-                district colour.
-              */
-
-              districtLayer.resetStyle(
-                selectedLayer
-              );
-
-
-              /*
-                Remove hover shadow.
-              */
-
-              if (
-                selectedLayer._path
-              ) {
-
-                selectedLayer._path.style.filter =
-                  "";
-
-              }
-
-
-              /*
-                Hide district name.
-              */
-
-              selectedLayer.closeTooltip();
-
-            }
-          );
-
-
-          /* =================================
-             CLICK
-          ================================= */
-
-          layer.on(
-            "click",
-            function() {
-
-              layer.bindPopup(
-
-                "<strong>" +
-                districtName +
-                "</strong>"
-
-              ).openPopup();
-
-            }
-          );
-
-        }
-
-      }).addTo(map);
-
-
-      /* =====================================
-         FIT BANGLADESH
-      ====================================== */
-
-      map.fitBounds(
-
-        districtLayer.getBounds(),
-
-        {
-          padding: [20, 20]
-        }
-
-      );
-
-    })
+    let districtLayer;
 
 
     /* =========================================
-       ERROR
+       LOAD GEOJSON
     ========================================= */
 
-    .catch(function(error) {
+    fetch(
+      "bangladesh_districts.geojson"
+    )
 
-      console.error(
-        "Bangladesh map error:",
-        error
+
+      .then(
+        function (response) {
+
+          if (!response.ok) {
+
+            throw new Error(
+              "GeoJSON file could not be loaded."
+            );
+
+          }
+
+
+          return response.json();
+
+        }
+      )
+
+
+      .then(
+        function (data) {
+
+
+          /* ===================================
+             CREATE DISTRICT LAYER
+          =================================== */
+
+          districtLayer =
+            L.geoJSON(
+              data,
+              {
+
+                style:
+                  districtStyle,
+
+
+                /* =================================
+                   DISTRICT INTERACTION
+                ================================= */
+
+                onEachFeature:
+                  function (
+                    feature,
+                    layer
+                  ) {
+
+
+                    const districtName =
+                      getDistrictName(
+                        feature
+                      );
+
+
+                    /* =============================
+                       MOUSE OVER
+                    ============================= */
+
+                    layer.on(
+                      "mouseover",
+                      function (e) {
+
+
+                        const selectedLayer =
+                          e.target;
+
+
+                        selectedLayer.bringToFront();
+
+
+                        selectedLayer.setStyle({
+
+                          weight: 0.8,
+
+                          color: "#006FA6",
+
+                          fillOpacity: 1
+
+                        });
+
+
+                        /* Hover shadow */
+
+                        if (
+                          selectedLayer._path
+                        ) {
+
+                          selectedLayer
+                            ._path
+                            .style
+                            .filter =
+                            "drop-shadow(0px 3px 5px rgba(0,0,0,0.35))";
+
+                        }
+
+
+                        /* District name */
+
+                        selectedLayer.bindTooltip(
+
+                          districtName,
+
+                          {
+
+                            permanent: true,
+
+                            direction: "center",
+
+                            className:
+                              "district-hover-label",
+
+                            opacity: 1
+
+                          }
+
+                        );
+
+
+                        selectedLayer.openTooltip();
+
+                      }
+                    );
+
+
+                    /* =============================
+                       MOUSE OUT
+                    ============================= */
+
+                    layer.on(
+                      "mouseout",
+                      function (e) {
+
+
+                        const selectedLayer =
+                          e.target;
+
+
+                        districtLayer.resetStyle(
+                          selectedLayer
+                        );
+
+
+                        if (
+                          selectedLayer._path
+                        ) {
+
+                          selectedLayer
+                            ._path
+                            .style
+                            .filter = "";
+
+                        }
+
+
+                        selectedLayer.closeTooltip();
+
+                      }
+                    );
+
+
+                    /* =============================
+                       CLICK
+                    ============================= */
+
+                    layer.on(
+                      "click",
+                      function () {
+
+
+                        layer.bindPopup(
+
+                          "<strong>" +
+                          districtName +
+                          "</strong>"
+
+                        ).openPopup();
+
+                      }
+                    );
+
+                  }
+
+              }
+            )
+            .addTo(map);
+
+
+          /* =====================================
+             FIT BANGLADESH
+          ====================================== */
+
+          map.fitBounds(
+
+            districtLayer.getBounds(),
+
+            {
+
+              padding:
+                [20, 20]
+
+            }
+
+          );
+
+        }
+      )
+
+
+      /* =========================================
+         ERROR
+      ========================================== */
+
+      .catch(
+        function (error) {
+
+
+          console.error(
+            "Bangladesh map error:",
+            error
+          );
+
+
+          document.getElementById(
+            "bangladesh-map"
+          ).innerHTML =
+
+            '<div class="flex items-center justify-center h-full text-red-500">' +
+
+            'Map data could not be loaded.' +
+
+            '</div>';
+
+        }
       );
 
+  }
 
-      document.getElementById(
-        "bangladesh-map"
-      ).innerHTML =
-
-        '<div class="flex items-center justify-center h-full text-red-500">' +
-
-        'Map data could not be loaded.' +
-
-        '</div>';
-
-    });
-
-});
+);
 
 </script>
+
 <!-- =========================================
      RESPONSIVE FOOTER
 ========================================= -->
@@ -971,19 +1755,16 @@ document.addEventListener("DOMContentLoaded", function () {
          bg-no-repeat
          text-white
          overflow-hidden"
-  style="background-image: url('image/image_c4.JPG');">
+  style="background-image: url('image/image_c4.JPG');"
+>
 
+  <!-- DARK OVERLAY -->
 
-  <!-- =========================================
-       DARK TRANSPARENT OVERLAY
-  ========================================== -->
+  <div
+    class="absolute inset-0 bg-black/55"
+  ></div>
 
-  <div class="absolute inset-0 bg-black/55"></div>
-
-
-  <!-- =========================================
-       FOOTER CONTENT
-  ========================================== -->
+  <!-- FOOTER CONTENT -->
 
   <div
     class="relative
@@ -998,471 +1779,522 @@ document.addEventListener("DOMContentLoaded", function () {
            md:pb-8
            flex
            flex-col
-           justify-end">
+           justify-end"
+  >
 
+```
+<!-- FOOTER GRID -->
 
-    <!-- =========================================
-         FOOTER GRID
-    ========================================== -->
+<div
+  class="grid
+         grid-cols-1
+         sm:grid-cols-2
+         md:grid-cols-3
+         gap-8
+         md:gap-8"
+>
 
-    <div
-      class="grid
-             grid-cols-1
-             sm:grid-cols-2
-             md:grid-cols-3
-             gap-8
-             md:gap-8">
 
+  <!-- =====================================
+       NEWSLETTER
+  ====================================== -->
 
-      <!-- =====================================
-           NEWSLETTER
-      ====================================== -->
+  <div>
 
-      <div>
+    <h4
+      class="text-lg font-semibold mb-3"
+    >
 
-        <h4 class="text-lg font-semibold mb-3">
-          Newsletter
-        </h4>
+      Newsletter
 
+    </h4>
 
-        <p
-          class="text-gray-200
-                 text-sm
-                 leading-relaxed
-                 mb-4">
 
-          Stay updated with our latest programs,
-          research, and stories from coastal communities.
-
-        </p>
-
-
-        <!-- Newsletter Form -->
-
-        <form class="flex flex-col gap-3">
-
-
-          <!-- Email -->
-
-          <input
-            type="email"
-            placeholder="Enter your email"
-            class="w-full
-                   px-4
-                   py-3
-                   rounded-lg
-                   bg-white/10
-                   border
-                   border-white/30
-                   text-white
-                   placeholder-gray-300
-                   focus:outline-none
-                   focus:ring-2
-                   focus:ring-yellow-300
-                   transition
-                   duration-300"
-            required
-          >
-
-
-          <!-- Subscribe Button -->
-
-          <button
-            type="submit"
-            class="w-full
-                   px-4
-                   py-3
-                   rounded-lg
-                   bg-white/10
-                   border
-                   border-white/30
-                   text-white
-                   font-semibold
-                   hover:bg-[#009BE2]
-                   hover:border-[#009BE2]
-                   transition-all
-                   duration-300">
-
-            Subscribe
-
-          </button>
-
-
-        </form>
-
-      </div>
-
-
-      <!-- =====================================
-           ORGANIZATION
-      ====================================== -->
-
-      <div>
-
-        <h3
-          class="text-2xl
-                 font-bold
-                 mb-2">
-
-          Dwip Unnayan Songstha
-
-        </h3>
-
-
-        <p
-          class="text-gray-200
-                 leading-relaxed">
-
-          Building resilient coastal communities
-          through sustainable development, health,
-          education, and climate action.
-
-        </p>
-
-      </div>
-
-
-      <!-- =====================================
-           QUICK LINKS
-           Hidden on Mobile
-      ====================================== -->
-
-      <div class="hidden sm:block">
-
-        <h4
-          class="font-semibold
-                 mb-2">
-
-          Quick Links
-
-        </h4>
-
-
-        <ul
-          class="space-y-2
-                 text-gray-200">
-
-
-          <li>
-
-            <a
-              href="About_Us.html"
-              class="hover:text-yellow-300
-                     transition
-                     duration-200">
-
-              About Us
-
-            </a>
-
-          </li>
-
-
-          <li>
-
-            <a
-              href="Project.html"
-              class="hover:text-yellow-300
-                     transition
-                     duration-200">
-
-              Projects
-
-            </a>
-
-          </li>
-
-
-          <li>
-
-            <a
-              href="Research.html"
-              class="hover:text-yellow-300
-                     transition
-                     duration-200">
-
-              Research
-
-            </a>
-
-          </li>
-
-
-          <li>
-
-            <a
-              href="Blog.html"
-              class="hover:text-yellow-300
-                     transition
-                     duration-200">
-
-              Blog
-
-            </a>
-
-          </li>
-
-
-        </ul>
-
-      </div>
-
-
-      <!-- =====================================
-           CONTACT
-      ====================================== -->
-
-      <div>
-
-        <h4
-          class="font-semibold
-                 mb-2">
-
-          Contact
-
-        </h4>
-
-
-        <div
-          class="space-y-1
-                 text-gray-200">
-
-
-          <p>
-            Dhaka, Bangladesh
-          </p>
-
-
-          <p>
-
-            <a
-              href="mailto:info@dus.ngo"
-              class="hover:text-yellow-300
-                     transition
-                     duration-200">
-
-              info@dus.ngo
-
-            </a>
-
-          </p>
-
-
-          <p>
-
-            <a
-              href="tel:+880248110362"
-              class="hover:text-yellow-300
-                     transition
-                     duration-200">
-
-              +880248110362
-
-            </a>
-
-          </p>
-
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================
-           SOCIAL MEDIA
-      ====================================== -->
-
-      <div
-        class="sm:col-span-2
-               md:col-span-1">
-
-
-        <h4
-          class="text-lg
-                 font-semibold
-                 mb-3">
-
-          Follow Us
-
-        </h4>
-
-
-        <div
-          class="flex
-                 flex-wrap
-                 gap-3">
-
-
-          <!-- Facebook -->
-
-          <a
-            href="https://www.facebook.com/profile.php?id=61592724257564"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            class="w-10
-                   h-10
-                   rounded-full
-                   bg-white/10
-                   flex
-                   items-center
-                   justify-center
-                   hover:bg-[#009BE2]
-                   transition
-                   duration-300">
-
-            <i
-              class="fa-brands
-                     fa-facebook-f
-                     text-white
-                     text-lg">
-            </i>
-
-          </a>
-
-
-          <!-- LinkedIn -->
-
-          <a
-            href="https://www.linkedin.com/company/72018379/admin/page-posts/published/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            class="w-10
-                   h-10
-                   rounded-full
-                   bg-white/10
-                   flex
-                   items-center
-                   justify-center
-                   hover:bg-[#009BE2]
-                   transition
-                   duration-300">
-
-            <i
-              class="fa-brands
-                     fa-linkedin-in
-                     text-white
-                     text-lg">
-            </i>
-
-          </a>
-
-
-          <!-- YouTube -->
-
-          <a
-            href="https://www.youtube.com/@dwipunnayansongstha"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="YouTube"
-            class="w-10
-                   h-10
-                   rounded-full
-                   bg-white/10
-                   flex
-                   items-center
-                   justify-center
-                   hover:bg-[#009BE2]
-                   transition
-                   duration-300">
-
-            <i
-              class="fa-brands
-                     fa-youtube
-                     text-white
-                     text-lg">
-            </i>
-
-          </a>
-
-
-          <!-- Instagram -->
-
-          <a
-            href="https://www.instagram.com/dwipunnayansongstha/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            class="w-10
-                   h-10
-                   rounded-full
-                   bg-white/10
-                   flex
-                   items-center
-                   justify-center
-                   hover:bg-[#009BE2]
-                   transition
-                   duration-300">
-
-            <i
-              class="fa-brands
-                     fa-instagram
-                     text-white
-                     text-lg">
-            </i>
-
-          </a>
-
-
-          <!-- X / Twitter -->
-
-          <a
-            href="https://x.com/dusngobd"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="X"
-            class="w-10
-                   h-10
-                   rounded-full
-                   bg-white/10
-                   flex
-                   items-center
-                   justify-center
-                   hover:bg-[#009BE2]
-                   transition
-                   duration-300">
-
-            <i
-              class="fa-brands
-                     fa-x-twitter
-                     text-white
-                     text-lg">
-            </i>
-
-          </a>
-
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-    <!-- =========================================
-         COPYRIGHT
-    ========================================== -->
-
-    <div
-      class="border-t
-             border-white/20
-             mt-8
-             md:mt-6
-             pt-4
-             text-center
+    <p
+      class="text-gray-200
              text-sm
-             text-gray-300">
+             leading-relaxed
+             mb-4"
+    >
 
-      © 2026 Dwip Unnayan Songstha.
-      All Rights Reserved.
+      Stay updated with our latest programs,
+      research, and stories from coastal
+      communities.
+
+    </p>
+
+
+    <form
+      class="flex flex-col gap-3"
+    >
+
+      <input
+        type="email"
+        placeholder="Enter your email"
+        class="w-full
+               px-4
+               py-3
+               rounded-lg
+               bg-white/10
+               border
+               border-white/30
+               text-white
+               placeholder-gray-300
+               focus:outline-none
+               focus:ring-2
+               focus:ring-yellow-300
+               transition
+               duration-300"
+        required
+      >
+
+
+      <button
+        type="submit"
+        class="w-full
+               px-4
+               py-3
+               rounded-lg
+               bg-white/10
+               border
+               border-white/30
+               text-white
+               font-semibold
+               hover:bg-[#009BE2]
+               hover:border-[#009BE2]
+               transition-all
+               duration-300"
+      >
+
+        Subscribe
+
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <!-- =====================================
+       ORGANIZATION
+  ====================================== -->
+
+  <div>
+
+    <h3
+      class="text-2xl
+             font-bold
+             mb-2"
+    >
+
+      Dwip Unnayan Songstha
+
+    </h3>
+
+
+    <p
+      class="text-gray-200
+             leading-relaxed"
+    >
+
+      Building resilient coastal communities
+      through sustainable development, health,
+      education, and climate action.
+
+    </p>
+
+  </div>
+
+
+  <!-- =====================================
+       QUICK LINKS
+       HIDDEN ON MOBILE
+  ====================================== -->
+
+  <div class="hidden sm:block">
+
+    <h4
+      class="font-semibold
+             mb-2"
+    >
+
+      Quick Links
+
+    </h4>
+
+
+    <ul
+      class="space-y-2
+             text-gray-200"
+    >
+
+      <li>
+
+        <a
+          href="About_Us.html"
+          class="hover:text-yellow-300
+                 transition
+                 duration-200"
+        >
+
+          About Us
+
+        </a>
+
+      </li>
+
+
+      <li>
+
+        <a
+          href="Project.html"
+          class="hover:text-yellow-300
+                 transition
+                 duration-200"
+        >
+
+          Projects
+
+        </a>
+
+      </li>
+
+
+      <li>
+
+        <a
+          href="Research.html"
+          class="hover:text-yellow-300
+                 transition
+                 duration-200"
+        >
+
+          Research
+
+        </a>
+
+      </li>
+
+
+      <li>
+
+        <a
+          href="Blog.html"
+          class="hover:text-yellow-300
+                 transition
+                 duration-200"
+        >
+
+          Blog
+
+        </a>
+
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- =====================================
+       CONTACT
+  ====================================== -->
+
+  <div>
+
+    <h4
+      class="font-semibold
+             mb-2"
+    >
+
+      Contact
+
+    </h4>
+
+
+    <div
+      class="space-y-1
+             text-gray-200"
+    >
+
+      <p>
+        Dhaka, Bangladesh
+      </p>
+
+
+      <p>
+
+        <a
+          href="mailto:info@dus.ngo"
+          class="hover:text-yellow-300
+                 transition
+                 duration-200"
+        >
+
+          info@dus.ngo
+
+        </a>
+
+      </p>
+
+
+      <p>
+
+        <a
+          href="tel:+880248110362"
+          class="hover:text-yellow-300
+                 transition
+                 duration-200"
+        >
+
+          +880248110362
+
+        </a>
+
+      </p>
 
     </div>
 
+  </div>
+
+
+  <!-- =====================================
+       SOCIAL MEDIA
+  ====================================== -->
+
+  <div
+    class="sm:col-span-2
+           md:col-span-1"
+  >
+
+    <h4
+      class="text-lg
+             font-semibold
+             mb-3"
+    >
+
+      Follow Us
+
+    </h4>
+
+
+    <div
+      class="flex
+             flex-wrap
+             gap-3"
+    >
+
+
+      <!-- Facebook -->
+
+      <a
+        href="https://www.facebook.com/profile.php?id=61592724257564"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+        class="w-10
+               h-10
+               rounded-full
+               bg-white/10
+               flex
+               items-center
+               justify-center
+               hover:bg-[#009BE2]
+               transition
+               duration-300"
+      >
+
+        <i
+          class="fa-brands
+                 fa-facebook-f
+                 text-white
+                 text-lg"
+        ></i>
+
+      </a>
+
+
+      <!-- LinkedIn -->
+
+      <a
+        href="https://www.linkedin.com/company/72018379/admin/page-posts/published/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+        class="w-10
+               h-10
+               rounded-full
+               bg-white/10
+               flex
+               items-center
+               justify-center
+               hover:bg-[#009BE2]
+               transition
+               duration-300"
+      >
+
+        <i
+          class="fa-brands
+                 fa-linkedin-in
+                 text-white
+                 text-lg"
+        ></i>
+
+      </a>
+
+
+      <!-- YouTube -->
+
+      <a
+        href="https://www.youtube.com/@dwipunnayansongstha"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="YouTube"
+        class="w-10
+               h-10
+               rounded-full
+               bg-white/10
+               flex
+               items-center
+               justify-center
+               hover:bg-[#009BE2]
+               transition
+               duration-300"
+      >
+
+        <i
+          class="fa-brands
+                 fa-youtube
+                 text-white
+                 text-lg"
+        ></i>
+
+      </a>
+
+
+      <!-- Instagram -->
+
+      <a
+        href="https://www.instagram.com/dwipunnayansongstha/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        class="w-10
+               h-10
+               rounded-full
+               bg-white/10
+               flex
+               items-center
+               justify-center
+               hover:bg-[#009BE2]
+               transition
+               duration-300"
+      >
+
+        <i
+          class="fa-brands
+                 fa-instagram
+                 text-white
+                 text-lg"
+        ></i>
+
+      </a>
+
+
+      <!-- X -->
+
+      <a
+        href="https://x.com/dusngobd"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="X"
+        class="w-10
+               h-10
+               rounded-full
+               bg-white/10
+               flex
+               items-center
+               justify-center
+               hover:bg-[#009BE2]
+               transition
+               duration-300"
+      >
+
+        <i
+          class="fa-brands
+                 fa-x-twitter
+                 text-white
+                 text-lg"
+        ></i>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================
+     COPYRIGHT
+====================================== -->
+
+<div
+  class="border-t
+         border-white/20
+         mt-8
+         md:mt-6
+         pt-4
+         text-center
+         text-sm
+         text-gray-300"
+>
+
+  © 2026 Dwip Unnayan Songstha.
+  All Rights Reserved.
+
+</div>
+```
 
   </div>
 
 </footer>
 
+<!-- =========================================
+     MOBILE MENU SCRIPT
+========================================= -->
 
+<script>
+
+  const menuBtn =
+    document.getElementById(
+      "menu-btn"
+    );
+
+  const mobileMenu =
+    document.getElementById(
+      "mobile-menu"
+    );
+
+
+  if (menuBtn && mobileMenu) {
+
+    menuBtn.addEventListener(
+      "click",
+      function () {
+
+        mobileMenu.classList.toggle(
+          "hidden"
+        );
+
+      }
+    );
+
+  }
+
+</script>
+
+</body>
+
+</html>
