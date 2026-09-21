@@ -372,13 +372,11 @@
 
     </div>
 
-
     <!-- Map -->
     <div
       id="bangladesh-map"
       class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
     </div>
-
 
     <!-- Legend -->
     <div class="flex flex-wrap justify-center gap-6 mt-6 text-sm">
@@ -393,7 +391,6 @@
           DUS Working Areas
         </span>
       </div>
-
 
       <div class="flex items-center">
         <span
@@ -416,13 +413,11 @@
      LEAFLET MAP
 ========================================= -->
 
-<!-- Leaflet CSS -->
 <link
   rel="stylesheet"
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
-<!-- Leaflet JS -->
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
@@ -434,14 +429,21 @@
     background: #f8fafc;
   }
 
-  /* Tooltip */
-  .district-label {
-    background: rgba(255,255,255,0.95);
+  /* District name shown when hovering */
+  .district-hover-label {
+    background: transparent;
     border: none;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-    color: #1e3a8a;
-    font-weight: 600;
-    font-size: 12px;
+    box-shadow: none;
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    text-shadow:
+      1px 1px 3px rgba(0,0,0,0.8),
+      -1px -1px 3px rgba(0,0,0,0.8);
+  }
+
+  .district-hover-label::before {
+    display: none;
   }
 
 </style>
@@ -451,80 +453,145 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  // Create map
+  /* =========================================
+     CREATE MAP
+  ========================================= */
+
   const map = L.map("bangladesh-map", {
+
     zoomControl: true,
+
     scrollWheelZoom: false
+
   });
 
 
-  // DUS working districts
+  /* =========================================
+     DUS WORKING DISTRICTS
+  ========================================= */
+
   const workingDistricts = [
+
+    "Dhaka",
+
     "Noakhali",
+
     "Cumilla",
     "Comilla",
+
     "Lakshmipur",
     "Laxmipur",
+
     "Chandpur",
+
+    "Feni",
+
     "Chattogram",
     "Chittagong",
+
     "Cox's Bazar",
-    "Coxs Bazar"
+    "Coxs Bazar",
+
+    "Bhola",
+    "Bhola"
+
   ];
 
 
-  // Normalize district names
+  /* =========================================
+     NORMALIZE DISTRICT NAMES
+  ========================================= */
+
   function normalizeName(name) {
 
     return String(name)
+
       .toLowerCase()
+
       .trim()
+
       .replace(/['’]/g, "")
+
       .replace(/\s+/g, " ");
 
   }
 
 
-  // Check whether district is a DUS working area
+  /* =========================================
+     CHECK WORKING AREA
+  ========================================= */
+
   function isWorkingDistrict(name) {
 
-    const normalizedName = normalizeName(name);
+    const normalizedName =
+      normalizeName(name);
 
     return workingDistricts.some(function (district) {
 
-      return normalizeName(district) === normalizedName;
+      return normalizeName(district)
+        === normalizedName;
 
     });
 
   }
 
 
-  // District styling
+  /* =========================================
+     GET DISTRICT NAME
+  ========================================= */
+
+  function getDistrictName(feature) {
+
+    const properties =
+      feature.properties || {};
+
+    return (
+
+      properties.DISTRICT ||
+
+      properties.District ||
+
+      properties.district ||
+
+      properties.NAME_2 ||
+
+      properties.name_2 ||
+
+      properties.NAME ||
+
+      properties.Name ||
+
+      properties.name ||
+
+      "District"
+
+    );
+
+  }
+
+
+  /* =========================================
+     DISTRICT STYLE
+  ========================================= */
+
   function districtStyle(feature) {
 
-    const properties = feature.properties || {};
-
     const districtName =
-      properties.DISTRICT ||
-      properties.District ||
-      properties.district ||
-      properties.NAME_2 ||
-      properties.name_2 ||
-      properties.NAME ||
-      properties.Name ||
-      properties.name ||
-      "";
+      getDistrictName(feature);
 
+
+    /* DUS WORKING AREA */
 
     if (isWorkingDistrict(districtName)) {
 
-      // DUS working area
       return {
 
         fillColor: "#009BE2",
-        fillOpacity: 0.85,
+
+        fillOpacity: 0.88,
 
         color: "#006FA6",
+
         weight: 1.5,
 
         opacity: 1
@@ -534,13 +601,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // Other districts
+    /* OTHER DISTRICTS */
+
     return {
 
       fillColor: "#ffffff",
+
       fillOpacity: 1,
 
       color: "#009BE2",
+
       weight: 1.2,
 
       opacity: 1
@@ -553,93 +623,125 @@ document.addEventListener("DOMContentLoaded", function () {
   let districtLayer;
 
 
-  // Load Bangladesh district GeoJSON
+  /* =========================================
+     LOAD GEOJSON
+  ========================================= */
+
   fetch("bangladesh_districts.geojson")
 
     .then(function(response) {
 
       if (!response.ok) {
+
         throw new Error(
           "Could not load bangladesh_districts.geojson"
         );
+
       }
 
       return response.json();
 
     })
 
+
     .then(function(data) {
 
+
+      /* =====================================
+         CREATE DISTRICT LAYER
+      ===================================== */
 
       districtLayer = L.geoJSON(data, {
 
         style: districtStyle,
 
 
+        /* ===================================
+           EACH DISTRICT
+        =================================== */
+
         onEachFeature: function(feature, layer) {
 
-          const properties = feature.properties || {};
-
-
           const districtName =
-            properties.DISTRICT ||
-            properties.District ||
-            properties.district ||
-            properties.NAME_2 ||
-            properties.name_2 ||
-            properties.NAME ||
-            properties.Name ||
-            properties.name ||
-            "District";
+            getDistrictName(feature);
 
 
-          // Tooltip
-          layer.bindTooltip(
+          /* =================================
+             HOVER
+          ================================= */
 
-            districtName,
-
-            {
-              sticky: true,
-              className: "district-label"
-            }
-
-          );
-
-
-          // Hover effect
           layer.on({
 
             mouseover: function(e) {
 
-              const hoveredLayer = e.target;
+              const hoveredLayer =
+                e.target;
+
+
+              /* Make boundary stronger */
 
               hoveredLayer.setStyle({
 
                 weight: 3,
+
                 color: "#1d4ed8",
 
                 fillOpacity:
                   isWorkingDistrict(districtName)
-                    ? 0.95
+                    ? 1
                     : 0.75
 
               });
 
+
               hoveredLayer.bringToFront();
+
+
+              /* =============================
+                 SHOW DISTRICT NAME
+              ============================= */
+
+              hoveredLayer.bindTooltip(
+
+                districtName,
+
+                {
+
+                  permanent: false,
+
+                  direction: "center",
+
+                  className:
+                    "district-hover-label",
+
+                  opacity: 1
+
+                }
+
+              ).openTooltip();
 
             },
 
+
+            /* =================================
+               MOUSE OUT
+            ================================= */
 
             mouseout: function(e) {
 
               districtLayer.resetStyle(e.target);
 
+              e.target.closeTooltip();
+
             },
 
 
+            /* =================================
+               CLICK
+            ================================= */
+
             click: function() {
 
-              // Optional popup
               layer.bindPopup(
 
                 "<strong>" +
@@ -657,16 +759,28 @@ document.addEventListener("DOMContentLoaded", function () {
       }).addTo(map);
 
 
-      // Fit map automatically
+      /* =====================================
+         FIT BANGLADESH MAP
+      ===================================== */
+
       map.fitBounds(
+
         districtLayer.getBounds(),
+
         {
+
           padding: [20, 20]
+
         }
+
       );
 
-
     })
+
+
+    /* =========================================
+       ERROR
+    ========================================= */
 
     .catch(function(error) {
 
@@ -675,12 +789,15 @@ document.addEventListener("DOMContentLoaded", function () {
         error
       );
 
+
       document.getElementById(
         "bangladesh-map"
       ).innerHTML =
 
         '<div class="flex items-center justify-center h-full text-red-500">' +
+
         'Map data could not be loaded.' +
+
         '</div>';
 
     });
@@ -688,7 +805,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
 
 
 <!-- =========================================
