@@ -350,9 +350,347 @@
 </section>
 
 
+<!-- =========================================
+     DUS WORKING AREA MAP
+========================================= -->
+
+<section id="working-area-map" class="py-16 bg-white">
+
+  <div class="container mx-auto px-4">
+
+    <!-- Section Heading -->
+    <div class="text-center mb-10">
+
+      <h2 class="text-4xl font-bold text-gray-800 mb-3">
+        Our Working Areas
+      </h2>
+
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        DUS is working across selected districts of Bangladesh
+        to support vulnerable and underserved communities.
+      </p>
+
+    </div>
 
 
-```html
+    <!-- Map -->
+    <div
+      id="bangladesh-map"
+      class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+    </div>
+
+
+    <!-- Legend -->
+    <div class="flex flex-wrap justify-center gap-6 mt-6 text-sm">
+
+      <div class="flex items-center">
+        <span
+          class="w-5 h-5 rounded-sm mr-2"
+          style="background:#009BE2;">
+        </span>
+
+        <span class="text-gray-700">
+          DUS Working Areas
+        </span>
+      </div>
+
+
+      <div class="flex items-center">
+        <span
+          class="w-5 h-5 rounded-sm mr-2 bg-white border-2 border-[#009BE2]">
+        </span>
+
+        <span class="text-gray-700">
+          Other Districts
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================
+     LEAFLET MAP
+========================================= -->
+
+<!-- Leaflet CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<!-- Leaflet JS -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<style>
+
+  #bangladesh-map {
+    background: #f8fafc;
+  }
+
+  /* Tooltip */
+  .district-label {
+    background: rgba(255,255,255,0.95);
+    border: none;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    color: #1e3a8a;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+</style>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Create map
+  const map = L.map("bangladesh-map", {
+    zoomControl: true,
+    scrollWheelZoom: false
+  });
+
+
+  // DUS working districts
+  const workingDistricts = [
+    "Noakhali",
+    "Cumilla",
+    "Comilla",
+    "Lakshmipur",
+    "Laxmipur",
+    "Chandpur",
+    "Chattogram",
+    "Chittagong",
+    "Cox's Bazar",
+    "Coxs Bazar"
+  ];
+
+
+  // Normalize district names
+  function normalizeName(name) {
+
+    return String(name)
+      .toLowerCase()
+      .trim()
+      .replace(/['’]/g, "")
+      .replace(/\s+/g, " ");
+
+  }
+
+
+  // Check whether district is a DUS working area
+  function isWorkingDistrict(name) {
+
+    const normalizedName = normalizeName(name);
+
+    return workingDistricts.some(function (district) {
+
+      return normalizeName(district) === normalizedName;
+
+    });
+
+  }
+
+
+  // District styling
+  function districtStyle(feature) {
+
+    const properties = feature.properties || {};
+
+    const districtName =
+      properties.DISTRICT ||
+      properties.District ||
+      properties.district ||
+      properties.NAME_2 ||
+      properties.name_2 ||
+      properties.NAME ||
+      properties.Name ||
+      properties.name ||
+      "";
+
+
+    if (isWorkingDistrict(districtName)) {
+
+      // DUS working area
+      return {
+
+        fillColor: "#009BE2",
+        fillOpacity: 0.85,
+
+        color: "#006FA6",
+        weight: 1.5,
+
+        opacity: 1
+
+      };
+
+    }
+
+
+    // Other districts
+    return {
+
+      fillColor: "#ffffff",
+      fillOpacity: 1,
+
+      color: "#009BE2",
+      weight: 1.2,
+
+      opacity: 1
+
+    };
+
+  }
+
+
+  let districtLayer;
+
+
+  // Load Bangladesh district GeoJSON
+  fetch("bangladesh_districts.geojson")
+
+    .then(function(response) {
+
+      if (!response.ok) {
+        throw new Error(
+          "Could not load bangladesh_districts.geojson"
+        );
+      }
+
+      return response.json();
+
+    })
+
+    .then(function(data) {
+
+
+      districtLayer = L.geoJSON(data, {
+
+        style: districtStyle,
+
+
+        onEachFeature: function(feature, layer) {
+
+          const properties = feature.properties || {};
+
+
+          const districtName =
+            properties.DISTRICT ||
+            properties.District ||
+            properties.district ||
+            properties.NAME_2 ||
+            properties.name_2 ||
+            properties.NAME ||
+            properties.Name ||
+            properties.name ||
+            "District";
+
+
+          // Tooltip
+          layer.bindTooltip(
+
+            districtName,
+
+            {
+              sticky: true,
+              className: "district-label"
+            }
+
+          );
+
+
+          // Hover effect
+          layer.on({
+
+            mouseover: function(e) {
+
+              const hoveredLayer = e.target;
+
+              hoveredLayer.setStyle({
+
+                weight: 3,
+                color: "#1d4ed8",
+
+                fillOpacity:
+                  isWorkingDistrict(districtName)
+                    ? 0.95
+                    : 0.75
+
+              });
+
+              hoveredLayer.bringToFront();
+
+            },
+
+
+            mouseout: function(e) {
+
+              districtLayer.resetStyle(e.target);
+
+            },
+
+
+            click: function() {
+
+              // Optional popup
+              layer.bindPopup(
+
+                "<strong>" +
+                districtName +
+                "</strong>"
+
+              ).openPopup();
+
+            }
+
+          });
+
+        }
+
+      }).addTo(map);
+
+
+      // Fit map automatically
+      map.fitBounds(
+        districtLayer.getBounds(),
+        {
+          padding: [20, 20]
+        }
+      );
+
+
+    })
+
+    .catch(function(error) {
+
+      console.error(
+        "Bangladesh map error:",
+        error
+      );
+
+      document.getElementById(
+        "bangladesh-map"
+      ).innerHTML =
+
+        '<div class="flex items-center justify-center h-full text-red-500">' +
+        'Map data could not be loaded.' +
+        '</div>';
+
+    });
+
+});
+
+</script>
+
+
+
 <!-- =========================================
      RESPONSIVE FOOTER
 ========================================= -->
