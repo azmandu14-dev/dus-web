@@ -279,325 +279,575 @@ content="width=device-width, initial-scale=1.0"
 
 <body class="bg-gray-50 font-sans">
 
+```html
 <!-- =========================================
      HEADER / NAVBAR
 ========================================= -->
 
 <header class="shadow-lg sticky top-0 z-[99999] w-full">
 
-  <nav
-    class="bg-[#009BE2] w-full px-6 lg:px-12 py-4"
-  >
+  <nav class="bg-[#009BE2] w-full px-6 lg:px-12 py-4">
 
-```
-<div class="flex justify-between items-center">
+    <div class="flex justify-between items-center">
 
 
-  <!-- =====================================
-       LOGO
-  ====================================== -->
+      <!-- =====================================
+           LOGO
+      ====================================== -->
 
-  <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-3">
 
-    <div class="bg-white p-2 rounded">
+        <div class="bg-white p-2 rounded">
 
-      <img
-        src="image/dus.png"
-        alt="DUS Logo"
-        class="h-10 w-auto"
-      >
-
-    </div>
-
-    <div
-      class="text-lg md:text-2xl font-bold text-white"
-    >
-
-      Dwip Unnayan Songstha
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       DESKTOP MENU
-  ====================================== -->
-
-  <div
-    class="hidden md:flex items-center space-x-6"
-  >
-
-    <ul
-      class="flex space-x-6 text-white"
-    >
-
-      <li>
-
-        <a
-          href="#about"
-          class="hover:text-yellow-300"
-        >
-
-          About Us
-
-        </a>
-
-      </li>
-
-
-      <!-- Our Initiatives -->
-
-      <li class="relative group">
-
-        <a
-          href="#"
-          class="hover:text-yellow-300 flex items-center"
-        >
-
-          Our Initiatives
-
-          <svg
-            class="w-4 h-4 ml-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <img
+            src="image/dus.png"
+            alt="DUS Logo"
+            class="h-10 w-auto"
           >
 
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
+        </div>
 
-          </svg>
+        <div class="text-lg md:text-2xl font-bold text-white">
+          Dwip Unnayan Songstha
+        </div>
 
-        </a>
+      </div>
 
 
-        <!-- Dropdown -->
+      <!-- =====================================
+           DESKTOP MENU
+      ====================================== -->
 
-        <ul
-          class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg hidden group-hover:block z-[999999]"
-        >
+      <div class="hidden md:flex items-center space-x-6">
 
-          <li>
+        <ul class="flex space-x-6 text-white">
+
+
+          <!-- =================================
+               ABOUT US
+          ================================== -->
+
+          <li class="relative group">
 
             <a
-              href="ongoing-programs.html"
-              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-t-lg"
+              href="#"
+              class="flex items-center hover:text-yellow-300 transition-colors duration-200"
             >
 
-              Ongoing Programs
+              About Us
+
+              <svg
+                class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+
+              </svg>
 
             </a>
+
+
+            <!-- About Us Dropdown -->
+
+            <ul
+              class="absolute left-0 top-full mt-3 w-60
+                     bg-white rounded-lg shadow-xl
+                     border border-gray-100 overflow-hidden
+                     invisible opacity-0 translate-y-1
+                     group-hover:visible group-hover:opacity-100
+                     group-hover:translate-y-0
+                     transition-all duration-200 ease-out
+                     z-[999999]"
+            >
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Who We Are
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  History
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Leadership
+                </a>
+
+              </li>
+
+              <li>
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Organizational Structure
+                </a>
+
+              </li>
+
+            </ul>
 
           </li>
 
 
-          <li>
+          <!-- =================================
+               OUR INITIATIVES
+          ================================== -->
+
+          <li class="relative group">
 
             <a
-              href="previous-programs.html"
-              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white"
+              href="#"
+              class="flex items-center hover:text-yellow-300 transition-colors duration-200"
             >
 
-              Previous Programs
+              Our Initiatives
+
+              <svg
+                class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+
+              </svg>
 
             </a>
+
+
+            <!-- Our Initiatives Dropdown -->
+
+            <ul
+              class="absolute left-0 top-full mt-3 w-60
+                     bg-white rounded-lg shadow-xl
+                     border border-gray-100 overflow-hidden
+                     invisible opacity-0 translate-y-1
+                     group-hover:visible group-hover:opacity-100
+                     group-hover:translate-y-0
+                     transition-all duration-200 ease-out
+                     z-[999999]"
+            >
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="ongoing-programs.html"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Ongoing Programs
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="previous-programs.html"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Previous Programs
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Disaster Response
+                </a>
+
+              </li>
+
+              <li>
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Social Enterprise
+                </a>
+
+              </li>
+
+            </ul>
 
           </li>
 
 
-          <li>
+          <!-- =================================
+               RESOURCES
+          ================================== -->
+
+          <li class="relative group">
 
             <a
-              href="ongoing-programs.html"
-              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white"
+              href="#"
+              class="flex items-center hover:text-yellow-300 transition-colors duration-200"
             >
 
-              Disaster Response
+              Resources
+
+              <svg
+                class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+
+              </svg>
 
             </a>
+
+
+            <!-- Resources Dropdown -->
+
+            <ul
+              class="absolute left-0 top-full mt-3 w-60
+                     bg-white rounded-lg shadow-xl
+                     border border-gray-100 overflow-hidden
+                     invisible opacity-0 translate-y-1
+                     group-hover:visible group-hover:opacity-100
+                     group-hover:translate-y-0
+                     transition-all duration-200 ease-out
+                     z-[999999]"
+            >
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Publications
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Reports
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  News & Updates
+                </a>
+
+              </li>
+
+              <li>
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Photo & Video Gallery
+                </a>
+
+              </li>
+
+            </ul>
 
           </li>
 
 
-          <li>
+          <!-- =================================
+               ENGAGEMENT
+          ================================== -->
+
+          <li class="relative group">
 
             <a
-              href="ongoing-programs.html"
-              class="block px-4 py-3 text-gray-700 hover:bg-green-600 hover:text-white rounded-b-lg"
+              href="#"
+              class="flex items-center hover:text-yellow-300 transition-colors duration-200"
             >
 
-              Social Enterprise
+              Engagement
+
+              <svg
+                class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+
+              </svg>
 
             </a>
+
+
+            <!-- Engagement Dropdown -->
+
+            <ul
+              class="absolute right-0 top-full mt-3 w-60
+                     bg-white rounded-lg shadow-xl
+                     border border-gray-100 overflow-hidden
+                     invisible opacity-0 translate-y-1
+                     group-hover:visible group-hover:opacity-100
+                     group-hover:translate-y-0
+                     transition-all duration-200 ease-out
+                     z-[999999]"
+            >
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Volunteer With Us
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Career
+                </a>
+
+              </li>
+
+              <li class="border-b border-gray-100">
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Partnership
+                </a>
+
+              </li>
+
+              <li>
+
+                <a
+                  href="#"
+                  class="block px-5 py-3.5 text-gray-700
+                         hover:bg-[#009BE2] hover:text-white
+                         transition-colors duration-200"
+                >
+                  Contact Us
+                </a>
+
+              </li>
+
+            </ul>
 
           </li>
 
         </ul>
 
-      </li>
 
-
-      <li>
-
-        <a
-          href="#about"
-          class="hover:text-yellow-300"
-        >
-
-          Resources
-
-        </a>
-
-      </li>
-
-
-      <li>
+        <!-- =================================
+             DONATE BUTTON
+        ================================== -->
 
         <a
-          href="#programs"
-          class="hover:text-yellow-300"
+          href="#"
+          class="bg-white text-green-600 px-4 py-2 rounded-lg
+                 hover:bg-gray-200 transition-colors duration-200"
         >
-
-          Engagement
-
+          Donate
         </a>
 
-      </li>
-
-    </ul>
+      </div>
 
 
-    <!-- Donate -->
+      <!-- =====================================
+           HAMBURGER
+      ====================================== -->
 
-    <a
-      href="#"
-      class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200"
+      <button
+        id="menu-btn"
+        class="md:hidden text-white"
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+
+        </svg>
+
+      </button>
+
+    </div>
+
+
+    <!-- =====================================
+         MOBILE MENU
+    ====================================== -->
+
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden mt-4"
     >
 
-      Donate
+      <ul class="flex flex-col space-y-4 text-white">
 
-    </a>
+        <li>
 
-  </div>
+          <a
+            href="#about"
+            class="block hover:text-yellow-300 transition-colors duration-200"
+          >
+            About
+          </a>
+
+        </li>
+
+        <li>
+
+          <a
+            href="#about"
+            class="block hover:text-yellow-300 transition-colors duration-200"
+          >
+            What we do
+          </a>
+
+        </li>
+
+        <li>
+
+          <a
+            href="#about"
+            class="block hover:text-yellow-300 transition-colors duration-200"
+          >
+            Projects
+          </a>
+
+        </li>
+
+        <li>
+
+          <a
+            href="#programs"
+            class="block hover:text-yellow-300 transition-colors duration-200"
+          >
+            Programs
+          </a>
+
+        </li>
+
+      </ul>
 
 
-  <!-- =====================================
-       HAMBURGER
-  ====================================== -->
-
-  <button
-    id="menu-btn"
-    class="md:hidden text-white"
-  >
-
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-8 w-8"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M4 6h16M4 12h16M4 18h16"
-      />
-
-    </svg>
-
-  </button>
-
-</div>
-
-
-<!-- =====================================
-     MOBILE MENU
-====================================== -->
-
-<div
-  id="mobile-menu"
-  class="hidden md:hidden mt-4"
->
-
-  <ul
-    class="flex flex-col space-y-4 text-white"
-  >
-
-    <li>
+      <!-- Mobile Donate -->
 
       <a
-        href="#about"
-        class="block hover:text-yellow-300"
+        href="#"
+        class="mt-4 inline-block bg-white text-green-600 px-4 py-2 rounded-lg
+               hover:bg-gray-200 transition-colors duration-200"
       >
-
-        About
-
+        Donate
       </a>
 
-    </li>
-
-
-    <li>
-
-      <a
-        href="#about"
-        class="block hover:text-yellow-300"
-      >
-
-        What we do
-
-      </a>
-
-    </li>
-
-
-    <li>
-
-      <a
-        href="#about"
-        class="block hover:text-yellow-300"
-      >
-
-        Projects
-
-      </a>
-
-    </li>
-
-
-    <li>
-
-      <a
-        href="#programs"
-        class="block hover:text-yellow-300"
-      >
-
-        Programs
-
-      </a>
-
-    </li>
-
-  </ul>
-
-
-  <a
-    href="#"
-    class="mt-4 inline-block bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-200"
-  >
-
-    Donate
-
-  </a>
-
-</div>
+    </div>
 
   </nav>
 
