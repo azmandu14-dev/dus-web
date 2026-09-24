@@ -861,29 +861,130 @@ content="width=device-width, initial-scale=1.0"
 </script>
 
 <!-- =========================================
-     BLUE GRADIENT SECTION
+     CAROUSEL
 ========================================= -->
 
-<section
-  class="w-full py-16 md:py-20"
-  style="background: linear-gradient(135deg, #009BE2 0%, #0077B6 100%);"
+<section class="relative py-0">
+
+  <div
+    class="container mx-auto relative"
+  >
+
+<div
+  class="swiper mySwiper relative"
 >
-  <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-    <div class="text-center text-white">
-      
-      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-5">
-        Your Heading Here
-      </h2>
+  <div class="swiper-wrapper">
 
-      <p class="max-w-3xl mx-auto text-base md:text-lg leading-relaxed opacity-95">
-        Your description or introductory text goes here.
-      </p>
+
+    <div class="swiper-slide">
+
+      <img
+        src="image/image_c1.JPG"
+        class="w-full h-[600px] object-cover"
+        alt="Slide 1"
+      >
+
+    </div>
+
+
+    <div class="swiper-slide">
+
+      <img
+        src="image/image_c2.JPG"
+        class="w-full h-[600px] object-cover"
+        alt="Slide 2"
+      >
+
+    </div>
+
+
+    <div class="swiper-slide">
+
+      <img
+        src="image/image_c3.JPG"
+        class="w-full h-[600px] object-cover"
+        alt="Slide 3"
+      >
 
     </div>
 
   </div>
+
+
+  <!-- Pagination -->
+
+  <div class="swiper-pagination"></div>
+
+
+  <!-- Navigation -->
+
+  <div class="swiper-button-next"></div>
+
+  <div class="swiper-button-prev"></div>
+
+
+  <!-- Halftone -->
+
+  <div
+    class="absolute bottom-0 left-0 w-full h-48 pointer-events-none halftone-overlay z-20"
+  ></div>
+
+</div>
+
+  </div>
+
 </section>
+
+<!-- =========================================
+     SWIPER JS
+========================================= -->
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+
+  const swiper =
+    new Swiper(
+      '.mySwiper',
+      {
+
+        loop: true,
+
+        effect: 'slide',
+
+        speed: 1200,
+
+        autoplay: {
+
+          delay: 3000,
+
+          disableOnInteraction: false
+
+        },
+
+        pagination: {
+
+          el: '.swiper-pagination',
+
+          clickable: true
+
+        },
+
+        navigation: {
+
+          nextEl: '.swiper-button-next',
+
+          prevEl: '.swiper-button-prev'
+
+        }
+
+      }
+
+    );
+
+</script>
+
 <!-- =========================================
      ABOUT SECTION
 ========================================= -->
