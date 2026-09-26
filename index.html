@@ -1368,86 +1368,102 @@ content="width=device-width, initial-scale=1.0"
   >
 
 
-<!-- Section Heading -->
+    <!-- =====================================
+         SECTION HEADING
+    ====================================== -->
 
-<div
-  class="text-center mb-10"
->
+    <div
+      class="text-center mb-10"
+    >
 
-  <h2
-    class="text-4xl font-bold text-gray-800 mb-3"
-  >
-
-    Our Working Areas
-
-  </h2>
-
-
-  <p
-    class="text-gray-600 max-w-2xl mx-auto"
-  >
-
-    DUS is working across selected districts
-    of Bangladesh to support vulnerable and
-    underserved communities.
-
-  </p>
-
-</div>
+      <h2
+        class="text-4xl font-bold text-gray-800 mb-3"
+      >
+        Our Working Areas
+      </h2>
 
 
-<!-- Map -->
+      <p
+        class="text-gray-600 max-w-2xl mx-auto"
+      >
+        DUS is working across selected districts
+        of Bangladesh to support vulnerable and
+        underserved communities.
+      </p>
 
-<div
-  id="bangladesh-map"
-  class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
-></div>
-
-
-<!-- Legend -->
-
-<div
-  class="flex flex-wrap justify-center gap-6 mt-6 text-sm"
->
+    </div>
 
 
-  <div class="flex items-center">
+    <!-- =====================================
+         MAP
+    ====================================== -->
 
-    <span
-      class="w-5 h-5 rounded-sm mr-2"
-      style="background:#009BE2;"
-    ></span>
-
-
-    <span class="text-gray-700">
-
-      DUS Working Areas
-
-    </span>
-
-  </div>
+    <div
+      id="bangladesh-map"
+      class="w-full h-[500px] md:h-[650px] rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+    ></div>
 
 
-  <div class="flex items-center">
+    <!-- =====================================
+         LEGEND
+    ====================================== -->
 
-    <span
-      class="w-5 h-5 rounded-sm mr-2 bg-white border border-[#009BE2]"
-    ></span>
+    <div
+      class="flex flex-wrap justify-center gap-6 mt-6 text-sm"
+    >
+
+      <!-- DUS Working Areas -->
+
+      <div class="flex items-center">
+
+        <span
+          class="w-5 h-5 rounded-sm mr-2"
+          style="background:#009BE2;"
+        ></span>
+
+        <span class="text-gray-700">
+          DUS Working Areas
+        </span>
+
+      </div>
 
 
-    <span class="text-gray-700">
+      <!-- Extended / Potential Areas -->
 
-      Other Districts
+      <div class="flex items-center">
 
-    </span>
+        <span
+          class="w-5 h-5 rounded-sm mr-2"
+          style="background:#87CEEB;"
+        ></span>
 
-  </div>
+        <span class="text-gray-700">
+          Extended / Potential Areas
+        </span>
 
-</div>
+      </div>
+
+
+      <!-- Other Districts -->
+
+      <div class="flex items-center">
+
+        <span
+          class="w-5 h-5 rounded-sm mr-2 bg-white border border-[#009BE2]"
+        ></span>
+
+        <span class="text-gray-700">
+          Other Districts
+        </span>
+
+      </div>
+
+    </div>
 
   </div>
 
 </section>
+
 
 <!-- =========================================
      LEAFLET JS
@@ -1456,6 +1472,7 @@ content="width=device-width, initial-scale=1.0"
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 ></script>
+
 
 <!-- =========================================
      MAP SCRIPT
@@ -1486,7 +1503,7 @@ document.addEventListener(
 
 
     /* =========================================
-       WORKING DISTRICTS
+       DUS WORKING DISTRICTS
     ========================================= */
 
     const workingDistricts = [
@@ -1523,6 +1540,27 @@ document.addEventListener(
 
 
     /* =========================================
+       SKY BLUE DISTRICTS
+    ========================================= */
+
+    const skyBlueDistricts = [
+
+      "patuakhali",
+
+      "barguna",
+
+      "bagerhat",
+
+      "khulna",
+
+      "satkhira",
+
+      "sathkhira"
+
+    ];
+
+
+    /* =========================================
        NORMALIZE NAME
     ========================================= */
 
@@ -1544,7 +1582,7 @@ document.addEventListener(
 
 
     /* =========================================
-       CHECK WORKING DISTRICT
+       CHECK DUS WORKING DISTRICT
     ========================================= */
 
     function isWorkingDistrict(name) {
@@ -1554,6 +1592,23 @@ document.addEventListener(
 
 
       return workingDistricts.includes(
+        normalized
+      );
+
+    }
+
+
+    /* =========================================
+       CHECK SKY BLUE DISTRICT
+    ========================================= */
+
+    function isSkyBlueDistrict(name) {
+
+      const normalized =
+        normalizeName(name);
+
+
+      return skyBlueDistricts.includes(
         normalized
       );
 
@@ -1647,6 +1702,10 @@ document.addEventListener(
         getDistrictName(feature);
 
 
+      /* =======================================
+         DUS WORKING AREAS
+      ======================================= */
+
       if (
         isWorkingDistrict(districtName)
       ) {
@@ -1667,6 +1726,35 @@ document.addEventListener(
 
       }
 
+
+      /* =======================================
+         SKY BLUE DISTRICTS
+      ======================================= */
+
+      if (
+        isSkyBlueDistrict(districtName)
+      ) {
+
+        return {
+
+          fillColor: "#87CEEB",
+
+          fillOpacity: 0.85,
+
+          color: "#009BE2",
+
+          weight: 0.8,
+
+          opacity: 1
+
+        };
+
+      }
+
+
+      /* =======================================
+         OTHER DISTRICTS
+      ======================================= */
 
       return {
 
@@ -1776,7 +1864,9 @@ document.addEventListener(
                         });
 
 
-                        /* Hover shadow */
+                        /* =========================
+                           HOVER SHADOW
+                        ========================= */
 
                         if (
                           selectedLayer._path
@@ -1791,7 +1881,9 @@ document.addEventListener(
                         }
 
 
-                        /* District name */
+                        /* =========================
+                           DISTRICT NAME
+                        ========================= */
 
                         selectedLayer.bindTooltip(
 
@@ -1935,6 +2027,43 @@ document.addEventListener(
 );
 
 </script>
+
+
+<!-- =========================================
+     DISTRICT HOVER LABEL STYLE
+========================================= -->
+
+<style>
+
+.district-hover-label {
+
+  background: #009BE2 !important;
+
+  border: none !important;
+
+  border-radius: 4px !important;
+
+  color: #ffffff !important;
+
+  font-weight: 600;
+
+  font-size: 12px;
+
+  padding: 4px 8px !important;
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.25);
+
+}
+
+
+.district-hover-label::before {
+
+  display: none !important;
+
+}
+
+</style>
 
 <!-- =========================================
      RESPONSIVE FOOTER
