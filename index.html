@@ -214,34 +214,37 @@ content="width=device-width, initial-scale=1.0"
 
 
     /* =========================================
-       GREEN HALFTONE OVERLAY
-    ========================================== */
+   DUS BLUE HALFTONE OVERLAY
+========================================== */
 
-    .halftone-overlay {
+.halftone-overlay {
 
-      background-image:
+  background-image:
 
-        radial-gradient(
-          circle,
-          rgba(0, 147, 70, 0.5) 1px,
-          transparent 1px
-        ),
+    /* DUS Blue Halftone */
+    radial-gradient(
+      circle,
+      rgba(0, 155, 226, 0.45) 1px,
+      transparent 1px
+    ),
 
-        linear-gradient(
-          to top,
-          rgba(0, 147, 70, 0.6),
-          transparent
-        );
+    /* DUS Blue Gradient */
+    linear-gradient(
+      to top,
+      rgba(0, 155, 226, 0.85),
+      rgba(0, 155, 226, 0.35),
+      transparent
+    );
 
-      background-size:
-        6px 6px,
-        100% 100%;
+  background-size:
+    6px 6px,
+    100% 100%;
 
-      mix-blend-mode: multiply;
+  mix-blend-mode: normal;
 
-      opacity: 0.8;
+  opacity: 1;
 
-    }
+}
 
   </style>
 
@@ -924,13 +927,9 @@ content="width=device-width, initial-scale=1.0"
   <div class="swiper-button-prev"></div>
 
 
-  <!-- Halftone -->
-
   <div
-    class="absolute bottom-0 left-0 w-full h-48 pointer-events-none halftone-overlay z-20"
-  ></div>
-
-</div>
+  class="absolute bottom-0 left-0 w-full h-48 pointer-events-none halftone-overlay z-20"
+></div>
 
   </div>
 
@@ -2080,7 +2079,7 @@ document.addEventListener(
          bg-no-repeat
          text-white
          overflow-hidden"
-  style="background-image: url('image/image_c4.');"
+  style="background-image: url('image/image_c4.webp');"
 >
 
   <!-- DARK OVERLAY -->
