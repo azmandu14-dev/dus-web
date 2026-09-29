@@ -214,40 +214,54 @@ content="width=device-width, initial-scale=1.0"
 
 
     /* =========================================
-       GREEN HALFTONE OVERLAY
-    ========================================== */
+   DUS BLUE HALFTONE GRADIENT OVERLAY
+========================================== */
 
-    .halftone-overlay {
+.halftone-overlay {
 
-      background-image:
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-        radial-gradient(
-          circle,
-          rgba(0, 147, 70, 0.5) 1px,
-          transparent 1px
-        ),
+  /* Covers approximately the lower 50% */
+  height: 50%;
 
-        linear-gradient(
-          to top,
-          rgba(0, 147, 70, 0.6),
-          transparent
-        );
+  background-image:
 
-      background-size:
-        6px 6px,
-        100% 100%;
+    /* Halftone dots */
+    radial-gradient(
+      circle,
+      rgba(0, 155, 226, 0.45) 1px,
+      transparent 1.2px
+    ),
 
-      mix-blend-mode: multiply;
+    /* Thematic blue gradient */
+    linear-gradient(
+      to top,
+      rgba(0, 155, 226, 0.95) 0%,
+      rgba(0, 155, 226, 0.75) 35%,
+      rgba(0, 155, 226, 0.35) 75%,
+      rgba(0, 155, 226, 0) 100%
+    );
 
-      opacity: 0.8;
+  background-size:
+    6px 6px,
+    100% 100%;
 
-    }
+  background-position:
+    center,
+    center;
 
-  </style>
+  background-repeat:
+    repeat,
+    no-repeat;
 
-</head>
+  opacity: 1;
 
-<body class="bg-gray-50 font-sans">
+  pointer-events: none;
+
+}
 
 
 <!-- =========================================
