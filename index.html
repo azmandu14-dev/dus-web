@@ -214,54 +214,40 @@ content="width=device-width, initial-scale=1.0"
 
 
     /* =========================================
-   DUS BLUE HALFTONE GRADIENT OVERLAY
-========================================== */
+       GREEN HALFTONE OVERLAY
+    ========================================== */
 
-.halftone-overlay {
+    .halftone-overlay {
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+      background-image:
 
-  /* Covers approximately the lower 50% */
-  height: 50%;
+        radial-gradient(
+          circle,
+          rgba(0, 147, 70, 0.5) 1px,
+          transparent 1px
+        ),
 
-  background-image:
+        linear-gradient(
+          to top,
+          rgba(0, 147, 70, 0.6),
+          transparent
+        );
 
-    /* Halftone dots */
-    radial-gradient(
-      circle,
-      rgba(0, 155, 226, 0.45) 1px,
-      transparent 1.2px
-    ),
+      background-size:
+        6px 6px,
+        100% 100%;
 
-    /* Thematic blue gradient */
-    linear-gradient(
-      to top,
-      rgba(0, 155, 226, 0.95) 0%,
-      rgba(0, 155, 226, 0.75) 35%,
-      rgba(0, 155, 226, 0.35) 75%,
-      rgba(0, 155, 226, 0) 100%
-    );
+      mix-blend-mode: multiply;
 
-  background-size:
-    6px 6px,
-    100% 100%;
+      opacity: 0.8;
 
-  background-position:
-    center,
-    center;
+    }
 
-  background-repeat:
-    repeat,
-    no-repeat;
+  </style>
 
-  opacity: 1;
+</head>
 
-  pointer-events: none;
-
-}
+<body class="bg-gray-50 font-sans">
 
 
 <!-- =========================================
@@ -2094,7 +2080,7 @@ document.addEventListener(
          bg-no-repeat
          text-white
          overflow-hidden"
-  style="background-image: url('image/image_c4.webp');"
+  style="background-image: url('image/image_c4.');"
 >
 
   <!-- DARK OVERLAY -->
